@@ -1,7 +1,7 @@
 // Setup
 
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -59,14 +59,21 @@ const project = (p, r) => {
   };
 };
 
+const rgbFromCoord = (x, y, z) => {
+  const r = ((x + 1) / 2) * 255;
+  const g = ((y + 1) / 2) * 255;
+  const b = ((z + 1) / 2) * 255;
+  return `rgb(${r | 0},${g | 0},${b | 0})`;
+};
+
 // 4th Dimension (Time)
 
 const minYear = 1789;
 const maxYear = new Date().getFullYear();
 
-const timeSlider = document.getElementById("timeSlider");
-const yearLabel = document.getElementById("yearLabel");
-const gravitySlider = document.getElementById("gravitySlider");
+const timeSlider = document.getElementById('timeSlider');
+const yearLabel = document.getElementById('yearLabel');
+const gravitySlider = document.getElementById('gravitySlider');
 
 timeSlider.min = minYear;
 timeSlider.max = maxYear;
@@ -82,6 +89,45 @@ timeSlider.oninput = () => {
 
 yearLabel.innerText = currentYear;
 
-document.getElementById("autoPlay").onclick = () => {
+document.getElementById('autoPlay').onclick = () => {
   auto = !auto;
 };
+
+// Continuous RGB Field
+
+const drawSphereGradient = (radius) => {
+  for (let i = 0; i < 2500; i++) {
+
+    const u = Math.random();
+    const v = Math.random();
+
+    const theta = 2 * Math.PI * u;
+    const phi = Math.acos(2 * v - 1);
+
+    const x = Math.sin(phi) * Math.cos(theta);
+    const y = Math.sin(phi) * Math.sin(theta);
+    const z = Math.cos(phi);
+
+    const rot = rotate({ x, y, z });
+    const proj = project(rot, radius);
+
+    ctx.fillStyle = rgbFromCoord(x, y, z)
+      .replace('rgb', 'rgba')
+      .replace(')', ', .10)');
+
+    ctx.fillRect(proj.x, proj.y, 2, 2);
+  }
+
+  ctx.beginPath();
+  ctx.arc(cx(), cy(), radius, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(255, 255, 255, .15)';
+  ctx.stroke();
+};
+
+// Main Loop
+
+const animate = () => {
+  drawSphereGradient(260);
+}
+
+animate();
