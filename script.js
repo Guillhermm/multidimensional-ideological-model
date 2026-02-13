@@ -93,6 +93,15 @@ document.getElementById('autoPlay').onclick = () => {
   auto = !auto;
 };
 
+// Export PNG
+
+document.getElementById('exportPNG').onclick = () => {
+  const link = document.createElement('a');
+  link.download = 'ideological-model-screenshot.png';
+  link.href = canvas.toDataURL();
+  link.click();
+};
+
 // Continuous RGB Field
 
 const drawSphereGradient = (radius) => {

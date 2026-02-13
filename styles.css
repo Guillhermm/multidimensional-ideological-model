@@ -10,6 +10,7 @@ canvas {
   position: absolute;
   top: 0;
   left: 0;
+  background: #0d0d0d;
 }
 
 input[type=range] {
