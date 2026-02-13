@@ -52,7 +52,7 @@ button:hover {
   background: #444;
 }
 
-#info {
+.info {
   margin-top: .75rem;
   font-size: .75rem;
   opacity: .9;

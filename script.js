@@ -293,6 +293,13 @@ document.getElementById('exportPNG').onclick = () => {
 const animate = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+  if (auto) {
+    currentYear += .3;
+    if (currentYear > maxYear) currentYear = minYear;
+    timeSlider.value = currentYear;
+    yearLabel.innerText = Math.floor(currentYear);
+  }
+
   const baseRadius = 260;
   const user = getUser();
   const radical = Math.sqrt(user.x ** 2 + user.y ** 2 + user.z ** 2);
@@ -360,6 +367,22 @@ const animate = () => {
     ctx.font = '11px Arial';
     ctx.fillText(p.name, p.x + 6, p.y);
   });
+
+  // Proximity
+  const nearest = active
+    .map(i => {
+      const d = Math.sqrt(
+        (i.x - user.x) ** 2 +
+        (i.y - user.y) ** 2 +
+        (i.z - user.z) ** 2
+      );
+      return { name: i.name, d };
+    })
+    .sort((a, b) => a.d - b.d)[0];
+
+  document.querySelector('.info .year').innerHTML = Math.floor(currentYear);
+  document.querySelector('.info .radicality').innerHTML = radical.toFixed(2);
+  document.querySelector('.info .nearest').innerHTML = (nearest ? nearest.name + " (" + nearest.d.toFixed(2) + ")" : "—");
 
   requestAnimationFrame(animate);
 }
