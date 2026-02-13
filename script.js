@@ -93,6 +93,25 @@ document.getElementById('autoPlay').onclick = () => {
   auto = !auto;
 };
 
+// User
+
+const xSlider = document.getElementById('xSlider');
+const ySlider = document.getElementById('ySlider');
+const zSlider = document.getElementById('zSlider');
+
+const getUser = () => {
+  let x = parseFloat(xSlider.value);
+  let y = parseFloat(ySlider.value);
+  let z = parseFloat(zSlider.value);
+
+  const len = Math.sqrt(x * x + y * y + z * z);
+  if (len > 1) {
+    x /= len; y /= len; z /= len;
+  }
+
+  return { name: 'You', x, y, z };
+};
+
 // Export PNG
 
 document.getElementById('exportPNG').onclick = () => {
@@ -133,10 +152,62 @@ const drawSphereGradient = (radius) => {
   ctx.stroke();
 };
 
+// Axes
+
+const drawAxes = (radius) => {
+  const axes = [
+    { x: 1, y: 0, z: 0, color: 'red' },
+    { x: 0, y: 1, z: 0, color: 'green' },
+    { x: 0, y: 0, z: 1, color: 'blue' }
+  ];
+
+  axes.forEach(a => {
+    const p = project(rotate(a), radius);
+    ctx.strokeStyle = a.color;
+    ctx.beginPath();
+    ctx.moveTo(cx(), cy());
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+  });
+};
+
 // Main Loop
 
 const animate = () => {
-  drawSphereGradient(260);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  const baseRadius = 260;
+  const user = getUser();
+  const radical = Math.sqrt(user.x ** 2 + user.y ** 2 + user.z ** 2);
+  const radius = baseRadius + radical * 40;
+
+  drawSphereGradient(radius);
+  drawAxes(radius);
+
+  const all = [user];
+
+  const projected = all.map(p => {
+    const rot = rotate(p);
+    const proj = project(rot, radius);
+    return { ...p, ...proj };
+  }).sort((a, b) => a.z - b.z);
+
+  projected.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, (6 * p.scale) / radius, 0, Math.PI * 2);
+
+    ctx.fillStyle = p.name === 'You'
+      ? 'magenta'
+      : rgbFromCoord(p.x, p.y, p.z);
+
+    ctx.fill();
+
+    ctx.fillStyle = '#fff';
+    ctx.font = '11px Arial';
+    ctx.fillText(p.name, p.x + 6, p.y);
+  });
+
+  requestAnimationFrame(animate);
 }
 
 animate();
