@@ -16,7 +16,7 @@ const drawSphereGradient = radius => {
   }
 
   ctx.beginPath();
-  ctx.arc(cx(), cy(), radius, 0, Math.PI * 2);
+  ctx.arc(cx(), cy(), radius * .75, 0, Math.PI * 2);
   ctx.strokeStyle = 'rgba(255, 255, 255, .15)';
   ctx.stroke();
 };

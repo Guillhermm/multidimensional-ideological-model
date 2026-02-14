@@ -30,7 +30,7 @@ const animate = () => {
     yearLabel.innerText = Math.floor(currentYear);
   }
 
-  const baseRadius = 260;
+  const baseRadius = 440;
   const user = getUser();
   const radical = Math.sqrt(user.x ** 2 + user.y ** 2 + user.z ** 2);
   const radius = baseRadius + radical * 40;
