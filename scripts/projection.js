@@ -34,9 +34,43 @@ const project = (p, radius) => {
   };
 };
 
+const normalize = v => {
+  const len = Math.hypot(v.x, v.y, v.z);
+  return {
+    x: v.x / len,
+    y: v.y / len,
+    z: v.z / len
+  };
+};
+
+// Camera spotlight
+const lightDir = normalize({ x: 0, y: 0, z: 1 });
+
 const rgbFromCoord = (x, y, z) => {
-  const r = ((x + 1) / 2) * 255;
-  const g = ((y + 1) / 2) * 255;
-  const b = ((z + 1) / 2) * 255;
-  return `rgb(${r | 0},${g | 0},${b | 0})`;
+  // Base color
+  const r = ((x + 1) / 2);
+  const g = ((y + 1) / 2);
+  const b = ((z + 1) / 2);
+
+  // Sphere normal (it is already unitary)
+  const nx = x;
+  const ny = y;
+  const nz = z;
+
+  // Light intensity (dot product)
+  let intensity =
+    nx * lightDir.x +
+    ny * lightDir.y +
+    nz * lightDir.z;
+
+  intensity = Math.max(0, intensity); // removes negative dark side
+
+  // Minimum environment light
+  const ambient = 0.2;
+
+  intensity = ambient + intensity * (1 - ambient);
+
+  return `rgb(${(r * intensity * 255) | 0},
+              ${(g * intensity * 255) | 0},
+              ${(b * intensity * 255) | 0})`;
 };
