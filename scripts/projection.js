@@ -1,8 +1,16 @@
 let ax = 0, ay = 0;
+let zoom = 1;
+const MIN_ZOOM = 0.5;
+const MAX_ZOOM = 5;
 
 const setRotation = (dx, dy) => {
   ay += dx * 0.005;
   ax += dy * 0.005;
+};
+
+const setZoom = factor => {
+  zoom *= factor;
+  zoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, zoom));
 };
 
 const rotate = p => {
@@ -17,7 +25,7 @@ const rotate = p => {
 };
 
 const project = (p, radius) => {
-  const scale = radius / (2 - p.z);
+  const scale = (radius * zoom) / (2 - p.z);
   return {
     x: cx() + p.x * scale,
     y: cy() - p.y * scale,

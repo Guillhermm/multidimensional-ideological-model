@@ -15,3 +15,9 @@ canvas.addEventListener('mousemove', e => {
   lx = e.clientX;
   ly = e.clientY;
 });
+
+canvas.addEventListener('wheel', e => {
+  e.preventDefault();
+
+  setZoom(e.deltaY > 0 ? 0.95 : 1.05);
+});
