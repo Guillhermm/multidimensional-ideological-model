@@ -14,7 +14,7 @@ The model also introduces historical forces as a temporal "gravitational field" 
 
 Each ideology $i$ is represented as a 3D point:
 
-$$ v_i = (x_i, y_i, z_i) $$
+$$ \mathbf{v}_i = (x_i, y_i, z_i) $$
 
 - $x_i, y_i, z_i \in [-1, 1]$
 - `base` coordinates correspond to the **canonical starting position** of the ideology.
@@ -22,11 +22,11 @@ $$ v_i = (x_i, y_i, z_i) $$
 
 The user position is similarly represented:
 
-$$ v_u = (x_u, y_u, z_u) $$
+$$ \mathbf{v}_u = (x_u, y_u, z_u) $$
 
 The **radicality** of a user’s position is defined as the Euclidean norm:
 
-$$ r_u = || v_u || = \sqrt{x^{2}_{u} + y^{2}_{u} + z^{2}_{u}} $$
+$$ r_u = || \mathbf{v}_u || = \sqrt{x^{2}_{u} + y^{2}_{u} + z^{2}_{u}} $$
 
 ### Historical Influence ("Gravitational Force")
 
@@ -45,11 +45,11 @@ Where:
 
 The ideology is updated according to cumulative event forces:
 
-$$ v_i(t) = v_i^{base} + \sum_{e} f_e(t) \cdot (h_e - v_i^{base}) $$
+$$ \mathbf{v}_i(t) = \mathbf{v}_i^{base} + \sum_{e} f_e(t) \cdot (h_e - v_i^{base}) $$
 
 Finally, coordinates are normalized to remain inside the unit sphere:
 
-$$ v_i(t) \leftarrow \frac{v_i(t)}{max(||v_i(t)||, 1)} $$
+$$ \mathbf{v}_i(t) \leftarrow \frac{\mathbf{v}_i(t)}{max(||\mathbf{v}_i(t)||, 1)} $$
 
 ### Distance Metrics
 
