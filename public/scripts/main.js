@@ -20,6 +20,8 @@ document.getElementById('exportPNG').onclick = () => {
   link.click();
 };
 
+if (typeof module !== 'undefined') module.exports = { getUser };
+
 const animate = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 

@@ -37,3 +37,5 @@ const drawAxes = radius => {
     ctx.stroke();
   });
 };
+
+if (typeof module !== 'undefined') module.exports = { drawSphereGradient, drawAxes };

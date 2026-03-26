@@ -17,3 +17,5 @@ timeSlider.oninput = () => {
 
 document.getElementById('autoPlay').onclick = () => auto = !auto;
 yearLabel.innerText = currentYear;
+
+if (typeof module !== 'undefined') module.exports = { minYear, maxYear };

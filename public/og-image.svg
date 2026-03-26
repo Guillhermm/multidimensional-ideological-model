@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <!-- Background gradient -->
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#070710"/>
+      <stop offset="100%" stop-color="#0f0f24"/>
+    </linearGradient>
+
+    <!-- Sphere body gradient -->
+    <radialGradient id="sphere" cx="42%" cy="45%" r="55%">
+      <stop offset="0%" stop-color="#818cf8" stop-opacity="0.18"/>
+      <stop offset="40%" stop-color="#3b82f6" stop-opacity="0.10"/>
+      <stop offset="70%" stop-color="#c084fc" stop-opacity="0.07"/>
+      <stop offset="100%" stop-color="#070710" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Glow filter -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Soft glow for text -->
+    <filter id="textglow">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/>
+      <feFlood flood-color="#818cf8" flood-opacity="0.4" result="color"/>
+      <feComposite in="color" in2="blur" operator="in" result="shadow"/>
+      <feMerge>
+        <feMergeNode in="shadow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Subtle grid -->
+  <line x1="600" y1="0" x2="600" y2="630" stroke="#ffffff" stroke-opacity="0.02" stroke-width="1"/>
+  <line x1="0" y1="315" x2="1200" y2="315" stroke="#ffffff" stroke-opacity="0.02" stroke-width="1"/>
+
+  <!-- ─── Sphere ─────────────────────────────────── -->
+  <!-- Main circle border -->
+  <circle cx="340" cy="315" r="240" fill="none" stroke="#818cf8" stroke-opacity="0.12" stroke-width="1.5"/>
+
+  <!-- Sphere body fill -->
+  <circle cx="340" cy="315" r="240" fill="url(#sphere)"/>
+
+  <!-- Equator ring -->
+  <ellipse cx="340" cy="315" rx="240" ry="50" fill="none" stroke="#818cf8" stroke-opacity="0.10" stroke-width="1" stroke-dasharray="6 4"/>
+
+  <!-- Meridian ring -->
+  <ellipse cx="340" cy="315" rx="50" ry="240" fill="none" stroke="#818cf8" stroke-opacity="0.10" stroke-width="1" stroke-dasharray="6 4"/>
+
+  <!-- X axis — Economics (red) -->
+  <line x1="100" y1="315" x2="580" y2="315" stroke="#ef4444" stroke-opacity="0.55" stroke-width="1.5" filter="url(#glow)"/>
+  <polygon points="580,311 593,315 580,319" fill="#ef4444" fill-opacity="0.7"/>
+
+  <!-- Y axis — Authority (green, tilted 60° like perspective) -->
+  <line x1="340" y1="555" x2="340" y2="75" stroke="#22c55e" stroke-opacity="0.55" stroke-width="1.5" filter="url(#glow)"/>
+  <polygon points="336,75 340,62 344,75" fill="#22c55e" fill-opacity="0.7"/>
+
+  <!-- Z axis — Identity (blue, diagonal) -->
+  <line x1="165" y1="490" x2="515" y2="140" stroke="#3b82f6" stroke-opacity="0.55" stroke-width="1.5" filter="url(#glow)"/>
+  <polygon points="507,133 519,128 514,141" fill="#3b82f6" fill-opacity="0.7"/>
+
+  <!-- Origin dot -->
+  <circle cx="340" cy="315" r="3" fill="#ffffff" fill-opacity="0.5"/>
+
+  <!-- Ideology dots — approximate 3D-to-2D projection of positions -->
+  <!-- Classical Liberalism (0.6, -0.5, -0.6) → right, down, front -->
+  <circle cx="474" cy="388" r="5" fill="#e06060" fill-opacity="0.85"/>
+  <!-- Anarcho-Capitalism (1.0, -1.0, -0.7) → far right, far down -->
+  <circle cx="540" cy="435" r="4" fill="#ff8888" fill-opacity="0.75"/>
+  <!-- Anarchism (-0.95, -0.9, -0.4) → far left, down -->
+  <circle cx="145" cy="420" r="5" fill="#8888ff" fill-opacity="0.75"/>
+  <!-- Social Democracy (-0.3, -0.15, -0.5) → slightly left, centre -->
+  <circle cx="278" cy="328" r="6" fill="#aaaaff" fill-opacity="0.85"/>
+  <!-- Fascism (0.7, 0.85, 0.9) → right, up, back -->
+  <circle cx="458" cy="226" r="5" fill="#e87060" fill-opacity="0.75"/>
+  <!-- Nazism (0.8, 0.9, 0.95) -->
+  <circle cx="490" cy="208" r="4" fill="#f06050" fill-opacity="0.70"/>
+  <!-- Stalinism (-0.85, 0.8, -0.1) → left, up -->
+  <circle cx="155" cy="212" r="5" fill="#6060e8" fill-opacity="0.75"/>
+  <!-- Libertarianism (0.9, -0.9, -0.8) → right, down, front -->
+  <circle cx="526" cy="426" r="4" fill="#f09060" fill-opacity="0.70"/>
+  <!-- Conservatism (0.5, 0.2, 0.7) → right, slightly up, back -->
+  <circle cx="430" cy="280" r="5" fill="#d08070" fill-opacity="0.80"/>
+  <!-- Nationalism (0.35, 0.4, 0.9) → slightly right, up, back -->
+  <circle cx="390" cy="254" r="4" fill="#d07080" fill-opacity="0.75"/>
+  <!-- Eco-Socialism (-0.75, -0.35, -0.75) → left, slightly down -->
+  <circle cx="176" cy="350" r="4" fill="#60b060" fill-opacity="0.75"/>
+  <!-- Technocracy (0.25, 0.55, -0.1) -->
+  <circle cx="385" cy="248" r="4" fill="#a0a0c8" fill-opacity="0.70"/>
+  <!-- Theocracy (0.4, 0.9, 0.85) → right, high up -->
+  <circle cx="410" cy="190" r="4" fill="#c08060" fill-opacity="0.70"/>
+  <!-- Maoism (-0.9, 0.7, -0.2) → left, up -->
+  <circle cx="162" cy="226" r="4" fill="#7060d0" fill-opacity="0.70"/>
+
+  <!-- Cluster centroid rings (yellow) -->
+  <circle cx="482" cy="312" r="12" fill="none" stroke="#facc15" stroke-width="1.5" stroke-opacity="0.55"/>
+  <circle cx="196" cy="315" r="12" fill="none" stroke="#facc15" stroke-width="1.5" stroke-opacity="0.55"/>
+  <circle cx="340" cy="200" r="12" fill="none" stroke="#facc15" stroke-width="1.5" stroke-opacity="0.55"/>
+
+  <!-- Axis labels -->
+  <text x="598" y="320" font-family="system-ui,sans-serif" font-size="13" fill="#ef4444" fill-opacity="0.8">X</text>
+  <text x="344" y="57" font-family="system-ui,sans-serif" font-size="13" fill="#22c55e" fill-opacity="0.8">Y</text>
+  <text x="520" y="136" font-family="system-ui,sans-serif" font-size="13" fill="#3b82f6" fill-opacity="0.8">Z</text>
+
+  <!-- ─── Text block ─────────────────────────────── -->
+  <!-- Eyebrow -->
+  <text x="660" y="170" font-family="system-ui,ui-sans-serif,sans-serif" font-size="13" letter-spacing="3" fill="#818cf8" fill-opacity="0.9" font-weight="600">OPEN SOURCE · ACADEMIC RESEARCH</text>
+
+  <!-- Main title -->
+  <text x="660" y="225" font-family="system-ui,ui-sans-serif,sans-serif" font-size="52" font-weight="700" fill="#ffffff" letter-spacing="-1">Multidimensional</text>
+  <text x="660" y="285" font-family="system-ui,ui-sans-serif,sans-serif" font-size="52" font-weight="700" fill="#818cf8" letter-spacing="-1">Ideological</text>
+  <text x="660" y="345" font-family="system-ui,ui-sans-serif,sans-serif" font-size="52" font-weight="700" fill="#ffffff" letter-spacing="-1">Model</text>
+
+  <!-- Divider -->
+  <line x1="660" y1="370" x2="1140" y2="370" stroke="#818cf8" stroke-opacity="0.2" stroke-width="1"/>
+
+  <!-- Feature tags -->
+  <rect x="660" y="388" width="130" height="26" rx="13" fill="#ef4444" fill-opacity="0.12"/>
+  <text x="725" y="406" font-family="system-ui,sans-serif" font-size="12" fill="#ef4444" fill-opacity="0.9" text-anchor="middle" font-weight="600">X Economics</text>
+
+  <rect x="802" y="388" width="130" height="26" rx="13" fill="#22c55e" fill-opacity="0.12"/>
+  <text x="867" y="406" font-family="system-ui,sans-serif" font-size="12" fill="#22c55e" fill-opacity="0.9" text-anchor="middle" font-weight="600">Y Authority</text>
+
+  <rect x="944" y="388" width="130" height="26" rx="13" fill="#3b82f6" fill-opacity="0.12"/>
+  <text x="1009" y="406" font-family="system-ui,sans-serif" font-size="12" fill="#3b82f6" fill-opacity="0.9" text-anchor="middle" font-weight="600">Z Identity</text>
+
+  <!-- Stats row -->
+  <text x="660" y="455" font-family="system-ui,sans-serif" font-size="15" fill="#ffffff" fill-opacity="0.5">20 Ideologies  ·  400 Years of History  ·  Historical Gravity</text>
+
+  <!-- URL -->
+  <text x="660" y="510" font-family="ui-monospace,monospace" font-size="14" fill="#818cf8" fill-opacity="0.65">multidimensional-ideological-model.vercel.app</text>
+
+  <!-- Bottom right: MIM badge -->
+  <circle cx="1155" cy="595" r="22" fill="#818cf8" fill-opacity="0.15" stroke="#818cf8" stroke-opacity="0.3" stroke-width="1"/>
+  <text x="1155" y="601" font-family="system-ui,sans-serif" font-size="13" fill="#818cf8" fill-opacity="0.9" text-anchor="middle" font-weight="700">MIM</text>
+</svg>
