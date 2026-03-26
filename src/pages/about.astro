@@ -1,0 +1,217 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const timeline = [
+  {
+    date: 'February 2026',
+    title: 'Initial Concept',
+    desc: 'Project conceived as a 3D extension of the 2D political compass. HTML5 Canvas chosen for zero-dependency, cross-platform rendering. First commit: base HTML/CSS structure and canvas helper scripts.',
+    tags: ['Foundation'],
+    color: '#818cf8',
+  },
+  {
+    date: 'February 2026',
+    title: 'Core 3D Engine',
+    desc: 'Implemented full 3D rendering pipeline: Euler rotation (Y then X axes), perspective projection, and Phong-inspired lighting with ambient and diffuse components. Sphere rendered as 2,500 random surface points with RGB-from-coordinate color mapping.',
+    tags: ['Rendering', 'Math'],
+    color: '#c084fc',
+  },
+  {
+    date: 'February 2026',
+    title: 'Ideological Data & Historical Trails',
+    desc: '20 political ideologies hand-positioned in 3D space with historical start years. Trail system added to visualize ideological drift — each ideology stores its last 80 positions, rendered as white path lines.',
+    tags: ['Data', 'Simulation'],
+    color: '#ef4444',
+  },
+  {
+    date: 'February 2026',
+    title: 'Historical Gravity Physics',
+    desc: 'Major historical events (1789, 1917, 1933, 1945, 1989, 2008) modeled as gravitational forces in ideological space. Linear temporal decay within 60-year windows. Inter-ideology interaction term added using dot-product attraction/repulsion.',
+    tags: ['Physics', 'Simulation'],
+    color: '#f97316',
+  },
+  {
+    date: 'February 2026',
+    title: 'K-Means Clustering & User Position',
+    desc: 'Implemented spherical K-means (k=3) using angular/cosine distance. Active ideologies are clustered in real time, revealing dominant groupings. User self-placement added via X/Y/Z sliders with radicality metric and nearest-ideology detection.',
+    tags: ['Algorithm', 'UX'],
+    color: '#22c55e',
+  },
+  {
+    date: 'February 2026',
+    title: 'Full Navigation & Script Modularization',
+    desc: 'Added zoom (scroll + +/− keys), full keyboard rotation (arrow keys), PNG export. Codebase split into 9 specialized modules: core, data, projection, interaction, physics, clustering, rendering, time, main.',
+    tags: ['UX', 'Architecture'],
+    color: '#3b82f6',
+  },
+  {
+    date: 'February 2026',
+    title: 'Academic Documentation',
+    desc: 'Formal mathematical documentation published: ideology vectors, base positions, historical force equations with Σ notation, clustering centroid formulas, perspective projection derivation, and an end-to-end numerical example (Fascism, 1935).',
+    tags: ['Research', 'Documentation'],
+    color: '#06b6d4',
+  },
+  {
+    date: 'March 2026',
+    title: 'Testing, CI/CD & Instability Metric',
+    desc: '44 unit tests across 4 modules (clustering, projection, physics, data) using Jest. System instability metric added — average velocity of active ideologies per frame. GitHub Actions pipeline: tests on every PR, deploy to GitHub Pages on main.',
+    tags: ['Testing', 'DevOps'],
+    color: '#84cc16',
+  },
+  {
+    date: 'March 2026',
+    title: 'Public Launch: Astro, Quiz & About Page',
+    desc: 'Full migration to Astro 5 + Tailwind CSS v4. Home page with model explanation, 15-question ideological positioning quiz (Likert scale, 3 axes), mobile touch support, URL params for quiz-to-tool handoff, and this About page.',
+    tags: ['Launch', 'UX'],
+    color: '#818cf8',
+    current: true,
+  },
+];
+
+const references = [
+  { title: 'American Politics in 3D — Applied Network Science (2023)', url: 'https://link.springer.com/article/10.1007/s41109-023-00608-w' },
+  { title: 'Charting Multidimensional Ideological Polarization — Nature Human Behaviour (2025)', url: 'https://www.nature.com/articles/s41562-025-02251-0' },
+  { title: 'Nonlinear Feedback Dynamics of Political Polarization — PNAS (2021)', url: 'https://www.pnas.org/doi/10.1073/pnas.2102149118' },
+  { title: 'Multidimensional Political Polarization in Online Social Networks — arXiv (2023)', url: 'https://arxiv.org/html/2305.02941v4' },
+  { title: 'Political Science Meets Physical Science — PNAS Nexus (2023)', url: 'https://academic.oup.com/pnasnexus/article/2/12/pgad401/7459963' },
+  { title: 'Navigating Multidimensional Ideologies with Reddit\'s Political Compass — arXiv (2024)', url: 'https://arxiv.org/html/2401.13656v1' },
+];
+---
+
+<Layout
+  title="About — Multidimensional Ideological Model"
+  description="About the Multidimensional Ideological Model — project history, author, and academic context."
+>
+  <!-- Author Hero -->
+  <section style="padding:5rem 1.5rem 3rem;max-width:900px;margin:0 auto;">
+    <a href="/" style="display:inline-block;font-size:0.8rem;color:var(--color-muted);text-decoration:none;margin-bottom:2rem;">← Back to Home</a>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;">
+      <div>
+        <div style="font-size:0.7rem;color:var(--color-accent);font-weight:600;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;">About the Author</div>
+        <h1 style="font-size:2rem;font-weight:700;letter-spacing:-0.025em;margin:0 0 0.5rem;">Guilherme Almeida Zeni</h1>
+        <p style="color:var(--color-muted);font-size:0.875rem;line-height:1.65;margin:0 0 1.25rem;">
+          Senior software engineer with 10+ years of experience. Currently pursuing a
+          second Master's degree in <strong style="color:var(--color-text);">Applied Mathematics</strong>
+          at IMECC, Universidade Estadual de Campinas (Unicamp), Brazil.
+        </p>
+        <p style="color:var(--color-muted);font-size:0.875rem;line-height:1.65;margin:0 0 1.5rem;">
+          Previous academic work includes research on the Traveling Salesman Problem applied to
+          postal routing and Vehicle Routing Problems for large-scale urban delivery,
+          including a book chapter in the Elsevier volume
+          <em>Smart Delivery Systems</em> (2020).
+        </p>
+        <div style="display:flex;flex-direction:column;gap:0.5rem;">
+          <div style="font-size:0.8rem;color:var(--color-muted);display:flex;align-items:center;gap:0.5rem;">
+            <span style="color:var(--color-accent);">✉</span>
+            <span>g146284@dac.unicamp.br</span>
+          </div>
+          <div style="font-size:0.8rem;color:var(--color-muted);display:flex;align-items:center;gap:0.5rem;">
+            <span style="color:var(--color-accent);">🏛</span>
+            <span>IMECC / Unicamp</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="model" style="background:var(--color-card);border:1px solid var(--color-border);border-radius:0.875rem;padding:1.75rem;">
+        <div style="font-size:0.7rem;color:var(--color-accent);font-weight:600;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;">About the Model</div>
+        <p style="color:var(--color-muted);font-size:0.875rem;line-height:1.65;margin:0 0 1rem;">
+          The Multidimensional Ideological Model treats political ideologies as vectors in a continuous 3D
+          unit sphere, with each axis capturing an independent dimension of political thought.
+        </p>
+        <p style="color:var(--color-muted);font-size:0.875rem;line-height:1.65;margin:0 0 1rem;">
+          Unlike quiz-based tools, this model introduces <strong style="color:var(--color-text);">temporal dynamics</strong>:
+          historical events act as gravitational forces, pulling ideologies through the space over time.
+          Ideologies attract and repel each other via a relational interaction term.
+        </p>
+        <p style="color:var(--color-muted);font-size:0.875rem;line-height:1.65;margin:0;">
+          The model is grounded in
+          <a href="/about#references" style="color:var(--color-accent);text-decoration:none;">academic literature</a>
+          on sociophysics, multidimensional ideology mapping, and spatial models of political competition.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Timeline -->
+  <section style="padding:3rem 1.5rem;max-width:900px;margin:0 auto;">
+    <div style="margin-bottom:2.5rem;">
+      <div style="font-size:0.7rem;color:var(--color-accent);font-weight:600;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.5rem;">Development History</div>
+      <h2 style="font-size:1.75rem;font-weight:700;letter-spacing:-0.02em;margin:0;">Project Timeline</h2>
+    </div>
+
+    <div style="position:relative;">
+      <!-- Vertical line -->
+      <div style="position:absolute;left:11px;top:8px;bottom:0;width:2px;background:var(--color-border);"></div>
+
+      {timeline.map((item, i) => (
+        <div style={`position:relative;padding-left:2.5rem;margin-bottom:${i === timeline.length - 1 ? '0' : '2.5rem'};`}>
+          <!-- Dot -->
+          <div style={`position:absolute;left:0;top:6px;width:24px;height:24px;border-radius:50%;background:${item.color};display:flex;align-items:center;justify-content:center;flex-shrink:0;${item.current ? 'box-shadow:0 0 0 4px rgba(129,140,248,0.2);' : ''}`}>
+            {item.current && <div style="width:8px;height:8px;border-radius:50%;background:#fff;"></div>}
+          </div>
+
+          <!-- Content -->
+          <div style={`background:var(--color-card);border:1px solid ${item.current ? item.color + '44' : 'var(--color-border)'};border-radius:0.75rem;padding:1.25rem;`}>
+            <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;margin-bottom:0.625rem;">
+              <span style="font-size:0.75rem;color:var(--color-muted);">{item.date}</span>
+              {item.current && <span style={`font-size:0.65rem;font-weight:600;padding:0.125rem 0.5rem;border-radius:9999px;background:rgba(129,140,248,0.15);color:${item.color};border:1px solid ${item.color}44;`}>Current</span>}
+              <div style="display:flex;gap:0.375rem;flex-wrap:wrap;">
+                {item.tags.map(tag => (
+                  <span style={`font-size:0.65rem;padding:0.125rem 0.5rem;border-radius:9999px;background:${item.color}15;color:${item.color};border:1px solid ${item.color}33;`}>{tag}</span>
+                ))}
+              </div>
+            </div>
+            <h3 style="font-size:1rem;font-weight:600;margin:0 0 0.5rem;">{item.title}</h3>
+            <p style="font-size:0.85rem;color:var(--color-muted);line-height:1.65;margin:0;">{item.desc}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Mathematical Model Summary -->
+  <section style="padding:3rem 1.5rem;max-width:900px;margin:0 auto;border-top:1px solid var(--color-border);">
+    <div style="font-size:0.7rem;color:var(--color-accent);font-weight:600;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.5rem;">Mathematics</div>
+    <h2 style="font-size:1.75rem;font-weight:700;letter-spacing:-0.02em;margin:0 0 1.5rem;">Core Formalism</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+      {[
+        { label: 'Ideology Vector', formula: 'v_i = (x_i, y_i, z_i) ∈ [−1,1]³', desc: 'Each ideology is a point in a 3D unit cube, constrained to unit sphere.' },
+        { label: 'Historical Force', formula: 'f_e(t) = s_e · g · (1 − |t−t_e| / T)', desc: 'Events pull ideologies within a 60-year temporal window, scaled by gravity g.' },
+        { label: 'Ideology Update', formula: 'v_i(t) = v_i_base + Σ f_e(t) · (h_e − v_i_base)', desc: 'Position shifts toward event coordinates, proportional to influence.' },
+        { label: 'Radicality', formula: 'r_u = ||v_u|| = √(x² + y² + z²)', desc: 'Distance from origin — zero is centrist, one is maximally radical.' },
+        { label: 'Clustering', formula: 'C_j = normalize(Σ v_i ∈ G_j / |G_j|)', desc: 'Spherical K-means with angular (cosine) distance, k=3 clusters.' },
+        { label: 'Projection', formula: 'scale = r · zoom / (2 − z_rot)', desc: 'Perspective projection with Euler rotation (Y→X axes), Phong lighting.' },
+      ].map(item => (
+        <div style="background:var(--color-card);border:1px solid var(--color-border);border-radius:0.75rem;padding:1.25rem;">
+          <div style="font-size:0.7rem;color:var(--color-muted);margin-bottom:0.375rem;">{item.label}</div>
+          <code style="display:block;font-family:var(--font-mono);font-size:0.8rem;color:var(--color-accent);margin-bottom:0.5rem;line-height:1.4;">{item.formula}</code>
+          <div style="font-size:0.8rem;color:var(--color-muted);line-height:1.5;">{item.desc}</div>
+        </div>
+      ))}
+    </div>
+    <p style="margin-top:1rem;font-size:0.8rem;color:var(--color-muted);">
+      Full formal documentation available in <code style="font-family:var(--font-mono);color:var(--color-accent);">docs/ACADEMICAL_DOCUMENTATION.md</code> and <code style="font-family:var(--font-mono);color:var(--color-accent);">docs/TECHNICAL_DOCUMENTATION.md</code>.
+    </p>
+  </section>
+
+  <!-- References -->
+  <section id="references" style="padding:3rem 1.5rem 5rem;max-width:900px;margin:0 auto;border-top:1px solid var(--color-border);">
+    <div style="font-size:0.7rem;color:var(--color-accent);font-weight:600;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.5rem;">Literature</div>
+    <h2 style="font-size:1.75rem;font-weight:700;letter-spacing:-0.02em;margin:0 0 1.5rem;">Academic References</h2>
+    <div style="display:flex;flex-direction:column;gap:0.625rem;">
+      {references.map((ref, i) => (
+        <a
+          href={ref.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          style="display:flex;align-items:flex-start;gap:1rem;background:var(--color-card);border:1px solid var(--color-border);border-radius:0.625rem;padding:1rem;text-decoration:none;transition:border-color 0.15s;"
+        >
+          <span style="font-size:0.75rem;color:var(--color-muted);font-family:var(--font-mono);flex-shrink:0;min-width:1.5rem;">[{i + 1}]</span>
+          <span style="font-size:0.875rem;color:var(--color-text);line-height:1.5;">{ref.title}</span>
+          <span style="flex-shrink:0;color:var(--color-muted);font-size:0.8rem;">↗</span>
+        </a>
+      ))}
+    </div>
+  </section>
+</Layout>

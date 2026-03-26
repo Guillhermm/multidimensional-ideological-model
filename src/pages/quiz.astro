@@ -1,0 +1,355 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Ideological Positioning Quiz — MIM"
+  description="Answer 15 questions to find your position in the 3D ideological space."
+>
+  <div style="max-width:760px;margin:0 auto;padding:3rem 1.5rem 6rem;">
+
+    <!-- Header -->
+    <div style="text-align:center;margin-bottom:3rem;">
+      <a href="/" style="display:inline-block;font-size:0.8rem;color:var(--color-muted);text-decoration:none;margin-bottom:1.5rem;">← Back to Home</a>
+      <h1 style="font-size:2.25rem;font-weight:700;letter-spacing:-0.025em;margin:0 0 0.75rem;">Ideological Positioning Quiz</h1>
+      <p style="color:var(--color-muted);font-size:1rem;max-width:480px;margin:0 auto;">
+        15 questions across three dimensions. Your answers will calculate your position
+        in 3D ideological space.
+      </p>
+    </div>
+
+    <!-- Progress -->
+    <div id="progressContainer" style="margin-bottom:2rem;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
+        <span id="sectionLabel" style="font-size:0.875rem;font-weight:600;color:var(--color-accent);">Section 1 of 3: Economic</span>
+        <span id="progressLabel" style="font-size:0.8rem;color:var(--color-muted);">Questions 1–5 of 15</span>
+      </div>
+      <div style="height:4px;background:var(--color-border);border-radius:9999px;overflow:hidden;">
+        <div id="progressBar" style="height:100%;width:0%;background:var(--color-accent);border-radius:9999px;transition:width 0.4s ease;"></div>
+      </div>
+    </div>
+
+    <!-- Quiz Sections -->
+    <form id="quizForm" novalidate>
+      <!-- Section 1: Economic -->
+      <div id="section-0" class="quiz-section" data-section="0" data-color="#ef4444" data-label="Economic Axis (X)">
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.75rem;">
+          <div style="width:32px;height:32px;border-radius:0.5rem;background:rgba(239,68,68,0.12);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;color:#ef4444;">X</div>
+          <div>
+            <div style="font-size:0.7rem;color:#ef4444;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;">Section 1 of 3</div>
+            <div style="font-weight:600;font-size:1rem;">Economic Axis</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Authority -->
+      <div id="section-1" class="quiz-section" style="display:none;" data-section="1" data-color="#22c55e" data-label="Authority Axis (Y)">
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.75rem;">
+          <div style="width:32px;height:32px;border-radius:0.5rem;background:rgba(34,197,94,0.1);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;color:#22c55e;">Y</div>
+          <div>
+            <div style="font-size:0.7rem;color:#22c55e;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;">Section 2 of 3</div>
+            <div style="font-weight:600;font-size:1rem;">Authority Axis</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Identity -->
+      <div id="section-2" class="quiz-section" style="display:none;" data-section="2" data-color="#3b82f6" data-label="Identity Axis (Z)">
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.75rem;">
+          <div style="width:32px;height:32px;border-radius:0.5rem;background:rgba(59,130,246,0.1);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;color:#3b82f6;">Z</div>
+          <div>
+            <div style="font-size:0.7rem;color:#3b82f6;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;">Section 3 of 3</div>
+            <div style="font-weight:600;font-size:1rem;">Identity Axis</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:2.5rem;">
+        <button type="button" id="btnBack" style="display:none;padding:0.75rem 1.5rem;border-radius:0.625rem;border:1px solid var(--color-border);background:transparent;color:var(--color-muted);font-size:0.9rem;cursor:pointer;transition:all 0.15s;">← Back</button>
+        <div style="flex:1;"></div>
+        <button type="button" id="btnNext" style="padding:0.75rem 2rem;border-radius:0.625rem;background:var(--color-accent);color:#fff;font-weight:600;font-size:0.9rem;border:none;cursor:pointer;transition:opacity 0.15s;">
+          Continue →
+        </button>
+      </div>
+    </form>
+
+    <!-- Results (hidden until quiz completes) -->
+    <div id="results" style="display:none;">
+      <div style="text-align:center;margin-bottom:2.5rem;">
+        <div style="font-size:2rem;margin-bottom:0.75rem;">🎯</div>
+        <h2 style="font-size:1.75rem;font-weight:700;margin:0 0 0.5rem;">Your Ideological Position</h2>
+        <p style="color:var(--color-muted);font-size:0.95rem;">Based on your answers, here is where you stand in the 3D ideological space.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr;gap:1rem;margin-bottom:2rem;">
+        <div style="background:var(--color-card);border:1px solid var(--color-border);border-radius:0.875rem;padding:1.5rem;">
+          <div id="resultX" style="margin-bottom:1.25rem;"></div>
+          <div id="resultY" style="margin-bottom:1.25rem;"></div>
+          <div id="resultZ"></div>
+        </div>
+        <div id="resultNearest" style="background:var(--color-card);border:1px solid var(--color-border);border-radius:0.875rem;padding:1.5rem;text-align:center;"></div>
+      </div>
+
+      <div style="text-align:center;display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;">
+        <a id="btnViewTool" href="/tool" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.875rem 2rem;border-radius:0.75rem;background:var(--color-accent);color:#fff;font-weight:600;font-size:1rem;text-decoration:none;">
+          Explore in the Model →
+        </a>
+        <button id="btnRetake" type="button" style="padding:0.875rem 2rem;border-radius:0.75rem;border:1px solid var(--color-border);background:transparent;color:var(--color-muted);font-size:0.875rem;cursor:pointer;">
+          Retake Quiz
+        </button>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script is:inline>
+  const QUESTIONS = [
+    // Economic (X axis)
+    { text: 'Free markets, without excessive regulation, produce the best economic outcomes for society.', axis: 'x', dir: 1 },
+    { text: 'The government should provide universal healthcare and education, free of charge for all citizens.', axis: 'x', dir: -1 },
+    { text: 'Individual economic freedom matters more than reducing inequality between rich and poor.', axis: 'x', dir: 1 },
+    { text: 'Large corporations and the wealthy should pay significantly higher taxes to fund public services.', axis: 'x', dir: -1 },
+    { text: 'Privatizing public services such as utilities and transport leads to better quality and efficiency.', axis: 'x', dir: 1 },
+    // Authority (Y axis)
+    { text: 'A strong central government is necessary to maintain social order and protect citizens.', axis: 'y', dir: 1 },
+    { text: 'People should be completely free to live however they choose, as long as they harm no one else.', axis: 'y', dir: -1 },
+    { text: 'Government surveillance of citizens can be justified to prevent crime or terrorism.', axis: 'y', dir: 1 },
+    { text: 'Drug use and other victimless behaviors should not be criminalized by the state.', axis: 'y', dir: -1 },
+    { text: 'A society built on discipline and strong leadership functions better than one that prioritizes individual autonomy.', axis: 'y', dir: 1 },
+    // Identity (Z axis)
+    { text: 'Nations have the right and duty to preserve their distinct cultural heritage.', axis: 'z', dir: 1 },
+    { text: 'Borders should be open and immigration policies should welcome people from all cultures.', axis: 'z', dir: -1 },
+    { text: 'International institutions like the UN or EU often undermine national sovereignty.', axis: 'z', dir: 1 },
+    { text: 'Cultural diversity enriches society and should be actively promoted.', axis: 'z', dir: -1 },
+    { text: 'Citizens owe special obligations to their fellow nationals that they do not owe to foreigners.', axis: 'z', dir: 1 },
+  ];
+
+  const LABELS = ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'];
+  const VALUES = [-2, -1, 0, 1, 2];
+
+  const SECTIONS = [
+    { id: 'section-0', questionRange: [0, 4], label: 'Section 1 of 3: Economic', progress: '33', questionLabel: 'Questions 1–5 of 15' },
+    { id: 'section-1', questionRange: [5, 9], label: 'Section 2 of 3: Authority', progress: '66', questionLabel: 'Questions 6–10 of 15' },
+    { id: 'section-2', questionRange: [10, 14], label: 'Section 3 of 3: Identity', progress: '100', questionLabel: 'Questions 11–15 of 15' },
+  ];
+
+  const IDEOLOGIES = [
+    { name: 'Classical Liberalism', x: 0.6, y: -0.5, z: -0.6 },
+    { name: 'Neoliberalism', x: 0.75, y: -0.35, z: -0.6 },
+    { name: 'Libertarianism', x: 0.9, y: -0.9, z: -0.8 },
+    { name: 'Anarcho-Capitalism', x: 1, y: -1, z: -0.7 },
+    { name: 'Anarchism', x: -0.95, y: -0.9, z: -0.4 },
+    { name: 'Social Democracy', x: -0.3, y: -0.15, z: -0.5 },
+    { name: 'Eco-Socialism', x: -0.75, y: -0.35, z: -0.75 },
+    { name: 'Stalinism', x: -0.85, y: 0.8, z: -0.1 },
+    { name: 'Maoism', x: -0.9, y: 0.7, z: -0.2 },
+    { name: 'Trotskyism', x: -0.85, y: 0.6, z: -0.5 },
+    { name: 'Fascism', x: 0.7, y: 0.85, z: 0.9 },
+    { name: 'Nazism', x: 0.8, y: 0.9, z: 0.95 },
+    { name: 'Conservatism', x: 0.5, y: 0.2, z: 0.7 },
+    { name: 'Neoconservatism', x: 0.6, y: 0.4, z: 0.7 },
+    { name: 'Nationalism', x: 0.35, y: 0.4, z: 0.9 },
+    { name: 'Technocracy', x: 0.25, y: 0.55, z: -0.1 },
+    { name: 'Populism', x: 0.15, y: 0.65, z: 0.55 },
+    { name: 'Monarchism', x: 0.55, y: 0.7, z: 0.75 },
+    { name: 'Theocracy', x: 0.4, y: 0.9, z: 0.85 },
+    { name: 'Municipalism', x: -0.65, y: -0.75, z: -0.45 },
+  ];
+
+  let answers = new Array(15).fill(null);
+  let currentSection = 0;
+
+  function buildSection(sectionIndex) {
+    const sec = SECTIONS[sectionIndex];
+    const el = document.getElementById(sec.id);
+    const [start, end] = sec.questionRange;
+
+    // Remove previously built questions (keep header)
+    const old = el.querySelectorAll('.q-block');
+    old.forEach(o => o.remove());
+
+    for (let qi = start; qi <= end; qi++) {
+      const q = QUESTIONS[qi];
+      const localIndex = qi - start;
+      const block = document.createElement('div');
+      block.className = 'q-block';
+      block.style.cssText = 'background:var(--color-card);border:1px solid var(--color-border);border-radius:0.75rem;padding:1.5rem;margin-bottom:1rem;';
+
+      const qNum = document.createElement('div');
+      qNum.style.cssText = 'font-size:0.7rem;color:var(--color-muted);margin-bottom:0.5rem;';
+      qNum.textContent = `Question ${qi + 1} of 15`;
+      block.appendChild(qNum);
+
+      const qText = document.createElement('p');
+      qText.style.cssText = 'font-size:0.95rem;line-height:1.55;margin:0 0 1.25rem;font-weight:500;';
+      qText.textContent = q.text;
+      block.appendChild(qText);
+
+      const scaleRow = document.createElement('div');
+      scaleRow.style.cssText = 'display:grid;grid-template-columns:repeat(5,1fr);gap:0.5rem;';
+
+      LABELS.forEach((label, li) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.dataset.qi = qi;
+        btn.dataset.val = VALUES[li];
+        btn.style.cssText = 'padding:0.5rem 0.25rem;border-radius:0.5rem;border:1px solid var(--color-border);background:transparent;color:var(--color-muted);font-size:0.7rem;cursor:pointer;transition:all 0.15s;line-height:1.3;';
+        btn.textContent = label;
+        if (answers[qi] === VALUES[li]) {
+          btn.style.background = 'var(--color-accent)';
+          btn.style.color = '#fff';
+          btn.style.borderColor = 'var(--color-accent)';
+        }
+        btn.addEventListener('click', () => selectAnswer(qi, VALUES[li]));
+        scaleRow.appendChild(btn);
+      });
+
+      block.appendChild(scaleRow);
+      el.appendChild(block);
+    }
+  }
+
+  function selectAnswer(qi, val) {
+    answers[qi] = val;
+    const sec = SECTIONS[currentSection];
+    const [start, end] = sec.questionRange;
+    const el = document.getElementById(sec.id);
+
+    el.querySelectorAll(`button[data-qi="${qi}"]`).forEach(btn => {
+      const isSelected = parseInt(btn.dataset.val) === val;
+      btn.style.background = isSelected ? 'var(--color-accent)' : 'transparent';
+      btn.style.color = isSelected ? '#fff' : 'var(--color-muted)';
+      btn.style.borderColor = isSelected ? 'var(--color-accent)' : 'var(--color-border)';
+    });
+  }
+
+  function sectionAnswered(sectionIndex) {
+    const [start, end] = SECTIONS[sectionIndex].questionRange;
+    for (let i = start; i <= end; i++) {
+      if (answers[i] === null) return false;
+    }
+    return true;
+  }
+
+  function showSection(index) {
+    SECTIONS.forEach((s, i) => {
+      document.getElementById(s.id).style.display = i === index ? 'block' : 'none';
+    });
+
+    const sec = SECTIONS[index];
+    document.getElementById('sectionLabel').textContent = sec.label;
+    document.getElementById('progressLabel').textContent = sec.questionLabel;
+    document.getElementById('progressBar').style.width = `${(index / 3) * 100}%`;
+    document.getElementById('btnBack').style.display = index === 0 ? 'none' : 'block';
+    document.getElementById('btnNext').textContent = index === 2 ? 'See Results →' : 'Continue →';
+
+    buildSection(index);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function calculateResults() {
+    const sums = { x: 0, y: 0, z: 0 };
+    QUESTIONS.forEach((q, i) => {
+      sums[q.axis] += (answers[i] ?? 0) * q.dir;
+    });
+    return {
+      x: parseFloat((sums.x / 10).toFixed(3)),
+      y: parseFloat((sums.y / 10).toFixed(3)),
+      z: parseFloat((sums.z / 10).toFixed(3)),
+    };
+  }
+
+  function findNearest(pos) {
+    let best = null;
+    let bestDist = Infinity;
+    IDEOLOGIES.forEach(ideo => {
+      const d = Math.sqrt((ideo.x - pos.x) ** 2 + (ideo.y - pos.y) ** 2 + (ideo.z - pos.z) ** 2);
+      if (d < bestDist) { bestDist = d; best = ideo; }
+    });
+    return { name: best.name, distance: bestDist.toFixed(2) };
+  }
+
+  function renderAxisBar(containerId, label, value, color) {
+    const pct = ((value + 1) / 2) * 100;
+    return `
+      <div style="margin-bottom:0.25rem;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:0.8rem;font-weight:600;color:${color};">${label}</span>
+        <span style="font-size:0.8rem;font-family:var(--font-mono);color:var(--color-text);">${value > 0 ? '+' : ''}${value.toFixed(3)}</span>
+      </div>
+      <div style="height:8px;background:var(--color-border);border-radius:9999px;position:relative;margin-bottom:0.5rem;">
+        <div style="position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--color-muted);opacity:0.3;"></div>
+        <div style="height:100%;width:${Math.abs(value) * 50}%;background:${color};border-radius:9999px;position:absolute;${value >= 0 ? 'left:50%' : 'right:50%'};"></div>
+      </div>
+    `;
+  }
+
+  function showResults() {
+    const pos = calculateResults();
+    const nearest = findNearest(pos);
+
+    document.getElementById('quizForm').style.display = 'none';
+    document.getElementById('progressContainer').style.display = 'none';
+    document.getElementById('results').style.display = 'block';
+
+    document.getElementById('resultX').innerHTML = renderAxisBar('resultX', 'Economic (X)', pos.x, '#ef4444');
+    document.getElementById('resultY').innerHTML = renderAxisBar('resultY', 'Authority (Y)', pos.y, '#22c55e');
+    document.getElementById('resultZ').innerHTML = renderAxisBar('resultZ', 'Identity (Z)', pos.z, '#3b82f6');
+
+    document.getElementById('resultNearest').innerHTML = `
+      <div style="font-size:0.75rem;color:var(--color-muted);margin-bottom:0.5rem;">Closest ideology</div>
+      <div style="font-size:1.5rem;font-weight:700;margin-bottom:0.25rem;">${nearest.name}</div>
+      <div style="font-size:0.8rem;color:var(--color-muted);">Distance: ${nearest.distance}</div>
+    `;
+
+    const url = `/tool?x=${pos.x}&y=${pos.y}&z=${pos.z}&from=quiz`;
+    document.getElementById('btnViewTool').href = url;
+
+    document.getElementById('progressBar').style.width = '100%';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  document.getElementById('btnNext').addEventListener('click', () => {
+    if (!sectionAnswered(currentSection)) {
+      const [start, end] = SECTIONS[currentSection].questionRange;
+      for (let i = start; i <= end; i++) {
+        if (answers[i] === null) {
+          const blocks = document.querySelectorAll('.q-block');
+          const block = blocks[i - SECTIONS[currentSection].questionRange[0]];
+          if (block) {
+            block.style.border = '1px solid #ef4444';
+            block.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+          return;
+        }
+      }
+      return;
+    }
+
+    if (currentSection < 2) {
+      currentSection++;
+      showSection(currentSection);
+    } else {
+      showResults();
+    }
+  });
+
+  document.getElementById('btnBack').addEventListener('click', () => {
+    if (currentSection > 0) {
+      currentSection--;
+      showSection(currentSection);
+    }
+  });
+
+  document.getElementById('btnRetake').addEventListener('click', () => {
+    answers = new Array(15).fill(null);
+    currentSection = 0;
+    document.getElementById('results').style.display = 'none';
+    document.getElementById('quizForm').style.display = 'block';
+    document.getElementById('progressContainer').style.display = 'block';
+    showSection(0);
+  });
+
+  // Init
+  showSection(0);
+</script>

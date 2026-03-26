@@ -9,7 +9,7 @@ const {
   project,
   normalize,
   rgbFromCoord
-} = require('../scripts/projection');
+} = require('../public/scripts/projection');
 
 describe('normalize', () => {
   test('returns unit vector', () => {
@@ -36,7 +36,7 @@ describe('rotate', () => {
     jest.resetModules();
     global.cx = () => 400;
     global.cy = () => 300;
-    const { rotate } = require('../scripts/projection');
+    const { rotate } = require('../public/scripts/projection');
     const p = { x: 0.5, y: 0.3, z: 0.2 };
     const result = rotate(p);
     expect(result.x).toBeCloseTo(0.5);
@@ -48,7 +48,7 @@ describe('rotate', () => {
     jest.resetModules();
     global.cx = () => 400;
     global.cy = () => 300;
-    const { setRotation, rotate } = require('../scripts/projection');
+    const { setRotation, rotate } = require('../public/scripts/projection');
     setRotation(100, 50); // arbitrary rotation
     const p = { x: 0.6, y: -0.5, z: 0.3 };
     const result = rotate(p);
@@ -61,7 +61,7 @@ describe('rotate', () => {
     jest.resetModules();
     global.cx = () => 400;
     global.cy = () => 300;
-    const { setRotation, rotate } = require('../scripts/projection');
+    const { setRotation, rotate } = require('../public/scripts/projection');
     // dy=0, dx such that ay = PI/2: dx * 0.005 = PI/2 => dx = PI / 0.01
     setRotation(Math.PI / 0.01, 0);
     const p = { x: 1, y: 0, z: 0 };
@@ -76,7 +76,7 @@ describe('setZoom', () => {
     jest.resetModules();
     global.cx = () => 400;
     global.cy = () => 300;
-    const { setZoom, project } = require('../scripts/projection');
+    const { setZoom, project } = require('../public/scripts/projection');
     setZoom(1000); // would make zoom huge
     // project with a very large zoom; scale = (radius * zoom) / (2 - z)
     // We just ensure no exception; clamped at 5
@@ -89,7 +89,7 @@ describe('setZoom', () => {
     jest.resetModules();
     global.cx = () => 400;
     global.cy = () => 300;
-    const { setZoom, project } = require('../scripts/projection');
+    const { setZoom, project } = require('../public/scripts/projection');
     setZoom(0.0001); // would make zoom tiny
     const result = project({ x: 0, y: 0, z: 0 }, 100);
     // scale = (100 * 0.5) / 2 = 25
@@ -102,7 +102,7 @@ describe('project', () => {
     jest.resetModules();
     global.cx = () => 400;
     global.cy = () => 300;
-    const { project } = require('../scripts/projection');
+    const { project } = require('../public/scripts/projection');
     // zoom=1 (default), radius=200, z=0 → scale = 200*1/(2-0) = 100
     const result = project({ x: 0.5, y: 0.5, z: 0 }, 200);
     expect(result.scale).toBeCloseTo(100);
@@ -115,7 +115,7 @@ describe('project', () => {
     jest.resetModules();
     global.cx = () => 400;
     global.cy = () => 300;
-    const { project } = require('../scripts/projection');
+    const { project } = require('../public/scripts/projection');
     const result = project({ x: 0, y: 0, z: 0.7 }, 100);
     expect(result.z).toBeCloseTo(0.7);
   });

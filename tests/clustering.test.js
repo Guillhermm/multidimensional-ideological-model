@@ -1,4 +1,4 @@
-const { normalizeCoords, kMeans } = require('../scripts/clustering');
+const { normalizeCoords, kMeans } = require('../public/scripts/clustering');
 
 describe('normalizeCoords', () => {
   test('returns a unit vector for a standard vector', () => {

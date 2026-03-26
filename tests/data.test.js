@@ -1,4 +1,4 @@
-const { events, baseIdeologies, ideologies } = require('../scripts/data');
+const { events, baseIdeologies, ideologies } = require('../public/scripts/data');
 
 describe('events', () => {
   test('contains 6 historical events', () => {

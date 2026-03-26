@@ -1,0 +1,94 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  hideNav?: boolean;
+}
+
+const {
+  title = 'Multidimensional Ideological Model',
+  description = 'Explore 20 political ideologies in 3D space across 400 years of history.',
+  hideNav = false,
+} = Astro.props;
+
+const currentPath = Astro.url.pathname;
+const navLinks = [
+  { href: '/', label: 'Home' },
+  { href: '/tool', label: 'Tool' },
+  { href: '/quiz', label: 'Quiz' },
+  { href: '/about', label: 'About' },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    {!hideNav && (
+      <nav style="position:sticky;top:0;z-index:50;background:rgba(7,7,16,0.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--color-border);">
+        <div style="max-width:1200px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:64px;">
+          <a href="/" style="display:flex;align-items:center;gap:0.5rem;text-decoration:none;">
+            <span style="width:28px;height:28px;border-radius:50%;background:conic-gradient(#ef4444,#22c55e,#3b82f6,#ef4444);opacity:0.9;flex-shrink:0;"></span>
+            <span style="font-weight:600;font-size:0.95rem;color:var(--color-text);letter-spacing:-0.01em;">MIM</span>
+          </a>
+          <div style="display:flex;align-items:center;gap:0.25rem;">
+            {navLinks.map(link => {
+              const isActive = currentPath === link.href || (link.href !== '/' && currentPath.startsWith(link.href));
+              return (
+                <a
+                  href={link.href}
+                  style={`padding:0.375rem 0.875rem;border-radius:0.5rem;font-size:0.875rem;font-weight:500;text-decoration:none;transition:all 0.15s;${isActive ? 'color:#fff;background:rgba(129,140,248,0.15);' : 'color:var(--color-muted);'}`}
+                >
+                  {link.label}
+                </a>
+              );
+            })}
+            <a
+              href="/tool"
+              style="margin-left:0.5rem;padding:0.375rem 1rem;border-radius:0.5rem;font-size:0.875rem;font-weight:600;text-decoration:none;background:var(--color-accent);color:#fff;transition:opacity 0.15s;"
+            >
+              Open Tool →
+            </a>
+          </div>
+        </div>
+      </nav>
+    )}
+
+    <slot />
+
+    {!hideNav && (
+      <footer style="border-top:1px solid var(--color-border);padding:2.5rem 1.5rem;text-align:center;">
+        <p style="color:var(--color-muted);font-size:0.8rem;margin:0;">
+          Multidimensional Ideological Model · Open Source · Built by
+          <a href="/about" style="color:var(--color-accent);text-decoration:none;">Guilherme Zeni</a>
+          · IMECC / Unicamp
+        </p>
+      </footer>
+    )}
+  </body>
+</html>

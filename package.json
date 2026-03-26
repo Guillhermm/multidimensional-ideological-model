@@ -1,21 +1,23 @@
 {
   "name": "multidimensional-ideological-model",
+  "type": "module",
   "version": "1.0.0",
-  "description": "A multidimensional visualization of ideological positions",
+  "description": "Interactive 3D visualization of political ideologies across history",
   "scripts": {
-    "test": "jest --coverage"
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "test": "jest --config jest.config.cjs --coverage"
+  },
+  "dependencies": {
+    "astro": "^6.0.0"
   },
   "devDependencies": {
-    "jest": "^29.7.0"
-  },
-  "jest": {
-    "testEnvironment": "node",
-    "testMatch": [
-      "**/tests/**/*.test.js"
-    ],
-    "coverageDirectory": "coverage",
-    "collectCoverageFrom": [
-      "scripts/**/*.js"
-    ]
+    "@babel/core": "^7.27.0",
+    "@babel/preset-env": "^7.27.0",
+    "@tailwindcss/vite": "~4.1.17",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0",
+    "tailwindcss": "~4.1.17"
   }
 }

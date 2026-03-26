@@ -32,7 +32,7 @@ describe('applyHistoricalForces', () => {
     global.currentYear = 1900; // 111 years after 1789, outside 60-year window
     global.ideologies = [];
 
-    ({ applyHistoricalForces } = require('../scripts/physics'));
+    ({ applyHistoricalForces } = require('../public/scripts/physics'));
     const ideo = makeIdeology(0.5, 0.5, 0.5);
     applyHistoricalForces(ideo);
 
@@ -49,7 +49,7 @@ describe('applyHistoricalForces', () => {
     global.currentYear = 1900; // exact year → full influence
     global.ideologies = [];
 
-    ({ applyHistoricalForces } = require('../scripts/physics'));
+    ({ applyHistoricalForces } = require('../public/scripts/physics'));
     const ideo = makeIdeology(0, 0, 0);
     applyHistoricalForces(ideo);
 
@@ -66,7 +66,7 @@ describe('applyHistoricalForces', () => {
     global.events = [makeEvent(1900, 0.5, 0, 0, 0.3)];
     global.currentYear = 1930; // 30 years after event
     global.ideologies = [];
-    ({ applyHistoricalForces } = require('../scripts/physics'));
+    ({ applyHistoricalForces } = require('../public/scripts/physics'));
     const ideoHighGravity = makeIdeology(0, 0, 0);
     applyHistoricalForces(ideoHighGravity);
 
@@ -75,7 +75,7 @@ describe('applyHistoricalForces', () => {
     global.events = [makeEvent(1900, 0.5, 0, 0, 0.3)];
     global.currentYear = 1930;
     global.ideologies = [];
-    ({ applyHistoricalForces } = require('../scripts/physics'));
+    ({ applyHistoricalForces } = require('../public/scripts/physics'));
     const ideoLowGravity = makeIdeology(0, 0, 0);
     applyHistoricalForces(ideoLowGravity);
 
@@ -90,7 +90,7 @@ describe('applyHistoricalForces', () => {
     global.currentYear = 1900;
     global.ideologies = [];
 
-    ({ applyHistoricalForces } = require('../scripts/physics'));
+    ({ applyHistoricalForces } = require('../public/scripts/physics'));
     const ideo = makeIdeology(0.5, 0.5, 0.5);
     applyHistoricalForces(ideo);
 
@@ -108,7 +108,7 @@ describe('applyHistoricalForces', () => {
     const subjectIdeology = makeIdeology(0.5, 0, 0, 1700);
     global.ideologies = [subjectIdeology, futureIdeology];
 
-    ({ applyHistoricalForces } = require('../scripts/physics'));
+    ({ applyHistoricalForces } = require('../public/scripts/physics'));
     const before = { x: subjectIdeology.x, y: subjectIdeology.y, z: subjectIdeology.z };
     applyHistoricalForces(subjectIdeology);
 
@@ -123,7 +123,7 @@ describe('applyHistoricalForces', () => {
     global.currentYear = 1900;
     global.ideologies = [];
 
-    ({ applyHistoricalForces } = require('../scripts/physics'));
+    ({ applyHistoricalForces } = require('../public/scripts/physics'));
     const ideo = makeIdeology(0.5, 0, 0);
     applyHistoricalForces(ideo);
 
