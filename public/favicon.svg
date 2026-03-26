@@ -1,15 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   <rect width="32" height="32" rx="6" fill="#0f0f1a"/>
   <defs>
-    <radialGradient id="g" cx="38%" cy="35%" r="65%">
-      <stop offset="0%" stop-color="#ef4444" stop-opacity="0.95"/>
-      <stop offset="40%" stop-color="#22c55e" stop-opacity="0.9"/>
-      <stop offset="75%" stop-color="#3b82f6" stop-opacity="0.95"/>
-      <stop offset="100%" stop-color="#818cf8" stop-opacity="0.85"/>
-    </radialGradient>
+    <!-- conic-gradient: red→orange→green→blue→indigo→red, 5×72° wedges, no blur at 32px -->
+    <clipPath id="c">
+      <circle cx="16" cy="16" r="13"/>
+    </clipPath>
   </defs>
-  <circle cx="16" cy="16" r="11" fill="url(#g)"/>
-  <circle cx="16" cy="16" r="11" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="0.5"/>
-  <line x1="5" y1="16" x2="27" y2="16" stroke="#ef4444" stroke-width="1" opacity="0.65"/>
-  <line x1="16" y1="5" x2="16" y2="27" stroke="#22c55e" stroke-width="1" opacity="0.65"/>
+  <!-- Conic gradient sphere (5 wedges, clipped to circle, opacity 0.85) -->
+  <g clip-path="url(#c)" opacity="0.85">
+    <!-- Red 0°→72° -->
+    <path d="M16 16 L16 3 A13 13 0 0 1 28.4 11.0 Z" fill="#ef4444"/>
+    <!-- Orange 72°→144° -->
+    <path d="M16 16 L28.4 11.0 A13 13 0 0 1 23.6 27.5 Z" fill="#f97316"/>
+    <!-- Green 144°→216° -->
+    <path d="M16 16 L23.6 27.5 A13 13 0 0 1 8.4 27.5 Z" fill="#22c55e"/>
+    <!-- Blue 216°→288° -->
+    <path d="M16 16 L8.4 27.5 A13 13 0 0 1 3.6 11.0 Z" fill="#3b82f6"/>
+    <!-- Indigo 288°→360° -->
+    <path d="M16 16 L3.6 11.0 A13 13 0 0 1 16 3 Z" fill="#818cf8"/>
+  </g>
+  <!-- Inner overlay: inset ~1.5px, dark tint + white ring -->
+  <circle cx="16" cy="16" r="11.5" fill="#070710" fill-opacity="0.3" stroke="white" stroke-opacity="0.15" stroke-width="1"/>
+  <!-- X axis: red horizontal -->
+  <line x1="3" y1="16" x2="29" y2="16" stroke="#ef4444" stroke-opacity="0.6" stroke-width="1"/>
+  <!-- Y axis: green vertical -->
+  <line x1="16" y1="3" x2="16" y2="29" stroke="#22c55e" stroke-opacity="0.6" stroke-width="1"/>
 </svg>

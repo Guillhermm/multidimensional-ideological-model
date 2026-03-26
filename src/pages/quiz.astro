@@ -354,7 +354,7 @@ import Layout from '../layouts/Layout.astro';
   showSection(0);
 </script>
 
-<style>
+<style is:global>
   .q-scale-row {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -364,6 +364,12 @@ import Layout from '../layouts/Layout.astro';
   @media (max-width: 480px) {
     .q-scale-row {
       grid-template-columns: 1fr;
+    }
+
+    .q-scale-row button {
+      text-align: left;
+      padding: 0.625rem 0.875rem;
+      font-size: 0.8rem;
     }
   }
 </style>

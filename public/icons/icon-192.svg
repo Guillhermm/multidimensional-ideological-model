@@ -1,26 +1,50 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
   <rect width="192" height="192" rx="40" fill="#0f0f1a"/>
   <defs>
-    <radialGradient id="sg" cx="38%" cy="35%" r="65%">
-      <stop offset="0%" stop-color="#ef4444" stop-opacity="0.95"/>
-      <stop offset="40%" stop-color="#22c55e" stop-opacity="0.9"/>
-      <stop offset="75%" stop-color="#3b82f6" stop-opacity="0.95"/>
-      <stop offset="100%" stop-color="#818cf8" stop-opacity="0.85"/>
-    </radialGradient>
-    <clipPath id="c">
-      <circle cx="96" cy="96" r="68"/>
+    <!--
+      Replicates: conic-gradient(from 0deg, #ef4444, #f97316, #22c55e, #3b82f6, #818cf8, #ef4444)
+      5 equal wedges of 72° each, blurred, then clipped to sphere circle.
+      Sphere radius = 80px, center = (96, 96)
+
+      Wedge endpoints (radius 80, measured clockwise from 12 o'clock):
+        0°  → (96, 16)
+        72° → (172.1, 71.3)
+       144° → (143.1, 160.7)
+       216° → (48.9, 160.7)
+       288° → (19.9, 71.3)
+       360° → (96, 16)
+    -->
+    <filter id="blur" x="-8%" y="-8%" width="116%" height="116%">
+      <feGaussianBlur stdDeviation="2.5"/>
+    </filter>
+    <clipPath id="sph">
+      <!-- Slightly larger than sphere to let blur bleed slightly at edge (matches CSS behavior) -->
+      <circle cx="96" cy="96" r="83"/>
     </clipPath>
   </defs>
-  <!-- Sphere -->
-  <circle cx="96" cy="96" r="68" fill="url(#sg)"/>
-  <!-- Subtle inner highlight -->
-  <circle cx="78" cy="76" r="22" fill="rgba(255,255,255,0.07)" clip-path="url(#c)"/>
-  <!-- Sphere border -->
-  <circle cx="96" cy="96" r="68" fill="none" stroke="rgba(255,255,255,0.13)" stroke-width="1.5"/>
-  <!-- X axis (red) -->
-  <line x1="28" y1="96" x2="164" y2="96" stroke="#ef4444" stroke-width="2.5" opacity="0.65"/>
-  <!-- Y axis (green) -->
-  <line x1="96" y1="28" x2="96" y2="164" stroke="#22c55e" stroke-width="2.5" opacity="0.65"/>
-  <!-- Z axis hint (diagonal, blue) -->
-  <line x1="48" y1="144" x2="144" y2="48" stroke="#3b82f6" stroke-width="1.5" opacity="0.4"/>
+
+  <!-- Conic gradient sphere: blurred, clipped, opacity 0.85 -->
+  <g clip-path="url(#sph)" opacity="0.85">
+    <g filter="url(#blur)">
+      <!-- Red 0°→72° -->
+      <path d="M96 96 L96 16 A80 80 0 0 1 172.1 71.3 Z" fill="#ef4444"/>
+      <!-- Orange 72°→144° -->
+      <path d="M96 96 L172.1 71.3 A80 80 0 0 1 143.1 160.7 Z" fill="#f97316"/>
+      <!-- Green 144°→216° -->
+      <path d="M96 96 L143.1 160.7 A80 80 0 0 1 48.9 160.7 Z" fill="#22c55e"/>
+      <!-- Blue 216°→288° -->
+      <path d="M96 96 L48.9 160.7 A80 80 0 0 1 19.9 71.3 Z" fill="#3b82f6"/>
+      <!-- Indigo 288°→360° -->
+      <path d="M96 96 L19.9 71.3 A80 80 0 0 1 96 16 Z" fill="#818cf8"/>
+    </g>
+  </g>
+
+  <!-- Inner overlay: inset 6px equiv → radius = 80 × (42/48) = 70px -->
+  <!-- background:rgba(7,7,16,0.3)  border:1px solid rgba(255,255,255,0.15) -->
+  <circle cx="96" cy="96" r="70" fill="#070710" fill-opacity="0.3" stroke="white" stroke-opacity="0.15" stroke-width="1.5"/>
+
+  <!-- X axis: horizontal red line across sphere -->
+  <line x1="16" y1="96" x2="176" y2="96" stroke="#ef4444" stroke-opacity="0.6" stroke-width="1.5"/>
+  <!-- Y axis: vertical green line across sphere -->
+  <line x1="96" y1="16" x2="96" y2="176" stroke="#22c55e" stroke-opacity="0.6" stroke-width="1.5"/>
 </svg>

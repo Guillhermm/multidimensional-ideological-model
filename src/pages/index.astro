@@ -73,7 +73,7 @@ import Layout from '../layouts/Layout.astro';
       </p>
     </div>
 
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;">
+    <div class="axes-grid">
       <!-- X Axis -->
       <div style="background:var(--color-card);border:1px solid var(--color-border);border-left:3px solid var(--color-axis-x);border-radius:0.875rem;padding:1.75rem;">
         <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;">
@@ -292,6 +292,12 @@ import Layout from '../layouts/Layout.astro';
     }
   }
 
+  .axes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+    gap: 1.5rem;
+  }
+
   @media (max-width: 699px) {
     .why-2d-grid {
       grid-template-columns: 1fr;
@@ -299,6 +305,10 @@ import Layout from '../layouts/Layout.astro';
     }
 
     .paths-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .axes-grid {
       grid-template-columns: 1fr;
     }
   }
