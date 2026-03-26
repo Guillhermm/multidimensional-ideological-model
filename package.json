@@ -1,0 +1,21 @@
+{
+  "name": "multidimensional-ideological-model",
+  "version": "1.0.0",
+  "description": "A multidimensional visualization of ideological positions",
+  "scripts": {
+    "test": "jest --coverage"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ],
+    "coverageDirectory": "coverage",
+    "collectCoverageFrom": [
+      "scripts/**/*.js"
+    ]
+  }
+}

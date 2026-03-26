@@ -74,3 +74,5 @@ const rgbFromCoord = (x, y, z) => {
               ${(g * intensity * 255) | 0},
               ${(b * intensity * 255) | 0})`;
 };
+
+if (typeof module !== 'undefined') module.exports = { setRotation, setZoom, rotate, project, normalize, rgbFromCoord };

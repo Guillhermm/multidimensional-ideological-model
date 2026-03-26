@@ -41,6 +41,18 @@ const animate = () => {
   ideologies.forEach(i => {
     if (currentYear >= i.startYear) {
       applyHistoricalForces(i);
+      if (i.prev) {
+        const vx = i.x - i.prev.x;
+        const vy = i.y - i.prev.y;
+        const vz = i.z - i.prev.z;
+
+        i.velocity = Math.sqrt(vx * vx + vy * vy + vz * vz);
+      } else {
+        i.velocity = 0;
+      }
+
+      i.prev = { x: i.x, y: i.y, z: i.z };
+
       i.trail.push({ x: i.x, y: i.y, z: i.z });
       if (i.trail.length > 80) i.trail.shift();
     }
@@ -98,9 +110,16 @@ const animate = () => {
     })
     .sort((a, b) => a.d - b.d)[0];
 
+  const avgVelocity =
+    active.reduce((s, i) => s + i.velocity, 0) / active.length;
+
   document.querySelector('.info .year').innerHTML = Math.floor(currentYear);
+  document.querySelector('.info .instability').innerHTML = avgVelocity.toFixed(4);
   document.querySelector('.info .radicality').innerHTML = radical.toFixed(2);
-  document.querySelector('.info .nearest').innerHTML = nearest ? `${nearest.name} (${nearest.d.toFixed(2)})` : '—';
+  document.querySelector('.info .nearest').innerHTML =
+    nearest ? `${nearest.name} (${nearest.d.toFixed(2)})` : '—';
+
+
 
   requestAnimationFrame(animate);
 };

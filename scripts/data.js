@@ -39,3 +39,5 @@ const ideologies = baseIdeologies.map(i => ({
   z: i[3],
   trail: []
 }));
+
+if (typeof module !== 'undefined') module.exports = { events, baseIdeologies, ideologies };
