@@ -103,12 +103,8 @@ npm run build      # static build → dist/
 
 ## CI/CD
 
-- **Any branch push / PR** → runs the test suite only
-- **Tag push matching `v[0-9]*`** (e.g. `v1.0.0`) → runs tests, then deploys to Vercel production
+**Any branch push / PR** → runs the test suite only. Vercel automatically deploys any changes merged to `main` branch.
 
-Vercel auto-deploys from GitHub are disabled via `vercel.json` (`ignoreCommand: "exit 0"`). All production deployments are controlled exclusively through tagged releases in CI.
-
-Required GitHub repository secrets for deployment: `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`.
 
 ---
 
