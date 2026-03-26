@@ -21,11 +21,20 @@ import Layout from '../layouts/Layout.astro';
   </div>
 
   <!-- Back link -->
-  <a href="/" style="position:fixed;top:1rem;right:1.25rem;z-index:90;background:rgba(15,15,26,0.8);backdrop-filter:blur(8px);border:1px solid var(--color-border);border-radius:0.5rem;padding:0.375rem 0.875rem;color:var(--color-muted);text-decoration:none;font-size:0.8rem;transition:color 0.15s;">← Home</a>
+  <a href="/" class="tool-back-link">← Home</a>
 
   <canvas id="canvas"></canvas>
 
+  <!-- Mobile toggle button -->
+  <button id="uiToggle" class="ui-toggle" aria-label="Toggle controls" aria-expanded="true">
+    <span class="ui-toggle-icon">⚙</span>
+    <span class="ui-toggle-label">Controls</span>
+  </button>
+
   <div id="ui">
+    <!-- Mobile drag handle -->
+    <div class="ui-handle" id="uiHandle"></div>
+
     <h2 style="margin:0 0 1rem;font-size:1rem;font-weight:700;letter-spacing:-0.01em;">Ideological Atlas</h2>
 
     <div class="control">
@@ -65,7 +74,7 @@ import Layout from '../layouts/Layout.astro';
       Nearest: <span class="nearest"></span>
     </div>
 
-    <div style="margin-top:0.75rem;font-size:0.65rem;color:rgba(255,255,255,0.25);line-height:1.5;">
+    <div class="ui-hints">
       Drag to rotate · Scroll to zoom<br>
       ← → ↑ ↓ keys · + / − zoom · 0 reset
     </div>
@@ -97,6 +106,22 @@ import Layout from '../layouts/Layout.astro';
         if (banner) banner.style.display = 'flex';
       }
     })();
+
+    // Mobile UI toggle
+    (function () {
+      const toggle = document.getElementById('uiToggle');
+      const ui = document.getElementById('ui');
+      if (!toggle || !ui) return;
+
+      let collapsed = false;
+
+      toggle.addEventListener('click', () => {
+        collapsed = !collapsed;
+        ui.classList.toggle('ui--collapsed', collapsed);
+        toggle.setAttribute('aria-expanded', !collapsed);
+        toggle.querySelector('.ui-toggle-label').textContent = collapsed ? 'Controls' : 'Hide';
+      });
+    })();
   </script>
 </Layout>
 
@@ -110,11 +135,30 @@ import Layout from '../layouts/Layout.astro';
     height: 100%;
   }
 
+  .tool-back-link {
+    position: fixed;
+    top: 1rem;
+    right: 1.25rem;
+    z-index: 90;
+    background: rgba(15, 15, 26, 0.8);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    padding: 0.375rem 0.875rem;
+    color: var(--color-muted);
+    text-decoration: none;
+    font-size: 0.8rem;
+    transition: color 0.15s;
+  }
+
+  /* Desktop: fixed panel top-left */
   #ui {
     position: fixed;
     top: 1.25rem;
     left: 1.25rem;
     width: 280px;
+    max-height: calc(100vh - 2.5rem);
+    overflow-y: auto;
     background: rgba(7, 7, 16, 0.82);
     padding: 1rem;
     border-radius: 0.875rem;
@@ -122,6 +166,9 @@ import Layout from '../layouts/Layout.astro';
     border: 1px solid rgba(255, 255, 255, 0.07);
     z-index: 10;
   }
+
+  .ui-handle { display: none; }
+  .ui-toggle { display: none; }
 
   .control {
     margin-bottom: 12px;
@@ -166,5 +213,79 @@ import Layout from '../layouts/Layout.astro';
     font-size: 0.75rem;
     opacity: 0.85;
     line-height: 1.7;
+  }
+
+  .ui-hints {
+    margin-top: 0.75rem;
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.25);
+    line-height: 1.5;
+  }
+
+  /* ─── Mobile: bottom sheet ─────────────────────── */
+  @media (max-width: 767px) {
+    .tool-back-link {
+      top: auto;
+      bottom: 1rem;
+      right: 1rem;
+      font-size: 0.75rem;
+      padding: 0.3rem 0.7rem;
+    }
+
+    .ui-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      position: fixed;
+      bottom: 1rem;
+      left: 1rem;
+      z-index: 20;
+      background: rgba(129, 140, 248, 0.9);
+      backdrop-filter: blur(8px);
+      border: none;
+      border-radius: 2rem;
+      padding: 0.5rem 1rem;
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      width: auto;
+    }
+
+    .ui-toggle-icon {
+      font-size: 0.95rem;
+    }
+
+    #ui {
+      top: auto;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      max-height: 55vh;
+      border-radius: 1rem 1rem 0 0;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: none;
+      padding: 0.5rem 1rem 1.5rem;
+      transition: transform 0.3s ease;
+      transform: translateY(0);
+    }
+
+    #ui.ui--collapsed {
+      transform: translateY(100%);
+    }
+
+    .ui-handle {
+      display: block;
+      width: 36px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 2px;
+      margin: 0.4rem auto 0.75rem;
+    }
+
+    .ui-hints {
+      display: none;
+    }
   }
 </style>

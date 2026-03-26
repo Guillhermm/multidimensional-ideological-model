@@ -187,7 +187,7 @@ import Layout from '../layouts/Layout.astro';
       block.appendChild(qText);
 
       const scaleRow = document.createElement('div');
-      scaleRow.style.cssText = 'display:grid;grid-template-columns:repeat(5,1fr);gap:0.5rem;';
+      scaleRow.className = 'q-scale-row';
 
       LABELS.forEach((label, li) => {
         const btn = document.createElement('button');
@@ -353,3 +353,17 @@ import Layout from '../layouts/Layout.astro';
   // Init
   showSection(0);
 </script>
+
+<style>
+  .q-scale-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.5rem;
+  }
+
+  @media (max-width: 480px) {
+    .q-scale-row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

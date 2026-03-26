@@ -86,7 +86,7 @@ const references = [
   <section style="padding:5rem 1.5rem 3rem;max-width:900px;margin:0 auto;">
     <a href="/" style="display:inline-block;font-size:0.8rem;color:var(--color-muted);text-decoration:none;margin-bottom:2rem;">← Back to Home</a>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;">
+    <div class="author-grid">
       <div>
         <div style="font-size:0.7rem;color:var(--color-accent);font-weight:600;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.75rem;">About the Author</div>
         <h1 style="font-size:2rem;font-weight:700;letter-spacing:-0.025em;margin:0 0 0.5rem;">Guilherme Almeida Zeni</h1>
@@ -174,7 +174,7 @@ const references = [
   <section style="padding:3rem 1.5rem;max-width:900px;margin:0 auto;border-top:1px solid var(--color-border);">
     <div style="font-size:0.7rem;color:var(--color-accent);font-weight:600;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.5rem;">Mathematics</div>
     <h2 style="font-size:1.75rem;font-weight:700;letter-spacing:-0.02em;margin:0 0 1.5rem;">Core Formalism</h2>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+    <div class="math-grid">
       {[
         { label: 'Ideology Vector', formula: 'v_i = (x_i, y_i, z_i) ∈ [−1,1]³', desc: 'Each ideology is a point in a 3D unit cube, constrained to unit sphere.' },
         { label: 'Historical Force', formula: 'f_e(t) = s_e · g · (1 − |t−t_e| / T)', desc: 'Events pull ideologies within a 60-year temporal window, scaled by gravity g.' },
@@ -215,3 +215,29 @@ const references = [
     </div>
   </section>
 </Layout>
+
+<style>
+  .author-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .math-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  @media (max-width: 699px) {
+    .author-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .math-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
