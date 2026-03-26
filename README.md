@@ -1,123 +1,139 @@
 # Multidimensional Ideological Model
 
-This project is an interactive **3D ideological sphere** that allows users to explore political ideologies along multiple dimensions. Beyond traditional left-right spectrums, this tool incorporates:
+**Live:** [multidimensional-ideological-model.vercel.app](https://multidimensional-ideological-model.vercel.app)
+**Repository:** [github.com/Guillhermm/multidimensional-ideological-model](https://github.com/Guillhermm/multidimensional-ideological-model)
 
-**1. Three ideological axes** (RGB mapping):
+An interactive 3D visualization of political ideologies as unit vectors in continuous Euclidean space, animated across 400 years of history and shaped by gravitational historical forces.
 
-- X-axis (red): economic dimension, from left to right
-- Y-axis (green): social/political engagement
-- Z-axis (blue): authority/liberty or state involvement
-
-**2. Historical evolution**:
-
-- Ideologies are influenced by historical events (e.g., revolutions, political shifts, economic crises).
-- A time slider allows users to move between 1789 (French Revolution) and the current year.
-- Each ideology leaves a trail showing its movement over time.
-
-**3. User input**:
-
-- Users can define their position in 3D ideological space via sliders.
-- The system calculates proximity to each ideology dynamically.
-
-**4. Clustering**:
-
-- Active ideologies are grouped using a simple k-means clustering algorithm.
-- Centroids are displayed to give a sense of major ideological “poles.”
-
-**5. Visualization**:
-
-- A continuous RGB sphere provides a visual background of ideological space.
-- Ideologies and user positions are projected into 2D using a simple perspective model.
-- Trails, clusters, and proximity calculations are updated in real-time.
+Built with Astro 5 + Tailwind CSS v4. Zero runtime dependencies on the visualization layer — pure HTML5 Canvas and ES6 JavaScript.
 
 ---
 
-## Current Features
+## Model
 
-- Interactive 3D sphere with drag-to-rotate functionality.
-- Time control slider for observing historical evolution.
-- User position sliders to place yourself in the ideological space.
-- Automatic animation of historical movement.
-- Historical events influence, including strength and proximity decay.
-- Clustering of active ideologies.
-- Trail visualization of ideological evolution.
-- Export current canvas as PNG.
-- Fully functional without a server (works with `file://`).
-- Uses modern ES6 syntax (arrow functions, template literals, const/let).
+Each ideology is a vector **v** = (x, y, z) ∈ [−1, 1]³ on the unit sphere S², with three orthogonal axes:
+
+| Axis | Dimension | −1 | +1 |
+|------|-----------|-----|-----|
+| X | Economic | Collective / Left | Private / Right |
+| Y | Authority | Libertarian / Free | Authoritarian / Order |
+| Z | Identity | Cosmopolitan / Progressive | Nationalist / Traditional |
+
+Historical events (French Revolution, Russian Revolution, Rise of Fascism, WWII, Fall of Berlin Wall, 2008 Crisis) act as gravitational forces that displace ideologies within a 60-year temporal window. Ideologies also attract and repel each other through a dot-product interaction term.
 
 ---
 
-## Installation / Usage
+## Features
 
-**1.** Clone the repository:
+- **20 political ideologies** spanning 1600–present, positioned as vectors in 3D space
+- **Time slider** animating ideological drift from 1789 to the current year
+- **Historical gravity** — tune the strength of historical event forces (0–2×)
+- **Spherical k-means clustering** (k=3) revealing dominant ideological coalitions in real time
+- **15-question positioning quiz** mapping your answers to coordinates via Likert scale
+- **User position** — place yourself via quiz or manual X/Y/Z sliders; nearest ideology computed dynamically
+- **Radicality metric** — Euclidean distance from origin (0 = centrist, 1 = maximally radical)
+- **System instability metric** — mean velocity of active ideologies per frame
+- **Trail visualization** — each ideology stores its last 80 positions
+- **PNG export** of the current canvas state
+- **Mobile support** — touch drag-to-rotate, bottom-sheet controls panel
+- **PWA** — installable, offline-capable via Service Worker
+- **Keyboard navigation** — arrow keys to rotate, +/− to zoom, 0 to reset
 
-```bash
-git clone https://github.com/yourusername/multidimensional-ideological-model.git
+---
+
+## Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Site framework | Astro 5 (static output) |
+| Styling | Tailwind CSS v4 |
+| Visualization | HTML5 Canvas, ES6 modules |
+| Testing | Jest 29 + Babel |
+| CI/CD | GitHub Actions → Vercel (tag-based) |
+
+---
+
+## Project Structure
+
+```
+src/
+  layouts/Layout.astro      # Shared nav, footer, PWA, OG meta
+  pages/
+    index.astro             # Landing page
+    tool.astro              # 3D visualization tool
+    quiz.astro              # 15-question positioning quiz
+    about.astro             # Author, timeline, math summary, references
+
+public/scripts/
+  core.js                   # Canvas setup, state, animation loop
+  data.js                   # Ideology coordinates and historical events
+  physics.js                # Historical gravity and inter-ideology interaction
+  clustering.js             # Spherical k-means (cosine distance, k=3)
+  projection.js             # Euler rotation + perspective projection
+  rendering.js              # Phong-shaded sphere, trails, labels, UI
+  interaction.js            # Mouse/touch drag, scroll zoom, keyboard
+  time.js                   # Time slider, auto-play, year label
+  main.js                   # Entry point, wires all modules
+
+docs/
+  ACADEMICAL_DOCUMENTATION.md   # Full mathematical formalism
+  TECHNICAL_DOCUMENTATION.md    # Implementation details
+
+tests/
+  clustering.test.js
+  data.test.js
+  physics.test.js
+  projection.test.js
 ```
 
-**2.** `Open index.html` directly in a modern browser (Chrome, Firefox, Edge). No server setup is required.
+---
 
-**3.** Adjust sliders for X, Y, Z coordinates (user ideology), time, and historical gravity.
+## Getting Started
 
-**4.** Drag on the canvas to rotate the sphere.
+```bash
+git clone https://github.com/Guillhermm/multidimensional-ideological-model.git
+cd multidimensional-ideological-model
+npm install
+npm run dev        # local dev server (Astro)
+npm test           # run Jest test suite
+npm run build      # static build → dist/
+```
 
 ---
 
-## Planned Features
+## CI/CD
 
-**1. Multilingual support**
+- **Any branch push / PR** → runs the test suite only
+- **Tag push matching `v[0-9]*`** (e.g. `v1.0.0`) → runs tests, then deploys to Vercel production
 
-- Current interface in English, but long-term plan is to support other languages.
+Vercel auto-deploys from GitHub are disabled via `vercel.json` (`ignoreCommand: "exit 0"`). All production deployments are controlled exclusively through tagged releases in CI.
 
-**2. Expanded ideological dataset**
-
-- Add smaller and niche political movements.
-- Add a richer historical timeline with multiple events per ideology.
-
-**3. Advanced visualization**
-
-- Optional 4th dimension (time) represented via color, opacity, or trail density.
-- Allow toggling “historical gravity” on/off per event.
-
-**4. Academic integration**
-
-- Provide metrics for “proximity” between user position and ideological clusters.
-- Allow exporting dataset for research purposes.
-
-**5. CodePen / GitHub Pages version**
-
-- Fully online, interactive version without server setup.
-
-**6. Future modularization**
-
-- With ES6 modules and/or Webpack/Bundler for better maintainability.
-- Optional use of WebGL or three.js for smoother rendering.
+Required GitHub repository secrets for deployment: `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`.
 
 ---
 
-## Contributing
+## Planned
 
-Contributions are welcome!
-
-If you want to:
-
-- Add new ideologies or events
-- Improve UI/UX
-- Enhance historical modeling
-- Add documentation or translations
-
-Please submit a pull request or open an issue to discuss.
+- Expand the ideology and events dataset (more ideologies, richer historical timeline)
+- Multilingual support
+- Empirical coordinate validation against Chapel Hill Expert Survey / Manifesto Project data
+- Gaussian decay option for historical forces
+- Psychometric validation of the 15-item quiz
 
 ---
 
-## Notes
+## Academic Context
 
-- This project is primarily a computational experiment to explore ideological spaces.
-- It is not intended to classify individuals, but to visualize complex relationships between ideologies over time.
-- Historical influence ("gravitational forces") is simplified for visualization purposes; it is not a precise historical model.
+The model is grounded in:
+- Spatial political modeling (Poole & Rosenthal, 1985; Downs, 1957)
+- Multidimensional ideology research (Ramaciotti et al., 2024; Abramowitz & Webster, 2025)
+- Sociophysics and opinion dynamics (Castellano et al., 2009; Diaz & Monteiro, 2023)
+
+A formal preprint is being prepared alongside this implementation.
+
+Full mathematical documentation: [docs/ACADEMICAL_DOCUMENTATION.md](docs/ACADEMICAL_DOCUMENTATION.md)
 
 ---
 
-**Author:** Guilherme Almeida Zeni
+**Author:** Guilherme Almeida Zeni — IMECC / Unicamp, Brazil
 **License:** MIT
-**Repository:** multidimensional-ideological-model
