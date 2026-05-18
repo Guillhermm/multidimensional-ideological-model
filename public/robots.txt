@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://multidimensional-ideological-model.vercel.app/sitemap.xml
