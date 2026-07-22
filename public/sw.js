@@ -1,4 +1,4 @@
-const CACHE = 'mim-v1';
+const CACHE = 'mim-v2';
 
 const PRECACHE = [
   '/',
@@ -18,6 +18,10 @@ const PRECACHE = [
   '/favicon.svg',
 ];
 
+// Only cache genuine, first-party, non-redirected 200 responses. This keeps
+// placeholder/redirect ("warmup") documents from ever poisoning the cache.
+const isCacheable = res => res.ok && res.type === 'basic' && !res.redirected;
+
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open(CACHE).then(cache => cache.addAll(PRECACHE)).then(() => self.skipWaiting())
@@ -33,14 +37,38 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
-  if (e.request.method !== 'GET') return;
+  const req = e.request;
+  if (req.method !== 'GET') return;
+
+  // Network-first for page navigations: always fetch fresh HTML so a stale or
+  // placeholder document can never get stuck. Fall back to cache when offline.
+  if (req.mode === 'navigate') {
+    e.respondWith(
+      fetch(req)
+        .then(res => {
+          if (isCacheable(res)) {
+            const clone = res.clone();
+            caches.open(CACHE).then(cache => cache.put(req, clone));
+          }
+          return res;
+        })
+        .catch(() =>
+          caches.open(CACHE).then(cache =>
+            cache.match(req).then(cached => cached || cache.match('/'))
+          )
+        )
+    );
+    return;
+  }
+
+  // Cache-first for static assets (scripts, icons, manifest).
   e.respondWith(
-    caches.match(e.request).then(cached => {
+    caches.match(req).then(cached => {
       if (cached) return cached;
-      return fetch(e.request).then(res => {
-        if (res.ok && e.request.url.startsWith(self.location.origin)) {
+      return fetch(req).then(res => {
+        if (isCacheable(res)) {
           const clone = res.clone();
-          caches.open(CACHE).then(cache => cache.put(e.request, clone));
+          caches.open(CACHE).then(cache => cache.put(req, clone));
         }
         return res;
       });
