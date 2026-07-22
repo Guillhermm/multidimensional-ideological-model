@@ -14,6 +14,10 @@ const {
 } = Astro.props;
 
 const currentPath = Astro.url.pathname;
+// Self-referencing canonical, normalized (no trailing slash, except root) to
+// match the sitemap and avoid "duplicate without user-selected canonical".
+const canonicalPath = currentPath === '/' ? '/' : currentPath.replace(/\/$/, '');
+const canonicalURL = new URL(canonicalPath, Astro.site);
 const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/tool', label: 'Tool' },
@@ -28,6 +32,7 @@ const navLinks = [
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
     <meta name="google-site-verification" content="HUjqaBGoIohngrs3uw5XRinm99D2s3xmC1zfHUDL4yM" />
     <meta name="google-site-verification" content="rkg6DyBZ44QyNpVlFY7fIc9RAp6hZkBTdyDLKzNcZQI" />
     <meta name="theme-color" content="#818cf8" />
@@ -51,7 +56,7 @@ const navLinks = [
     <meta property="og:image" content={new URL('/og-image.svg', Astro.site)} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:url" content={Astro.url} />
+    <meta property="og:url" content={canonicalURL} />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
