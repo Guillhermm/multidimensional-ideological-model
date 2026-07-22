@@ -3,7 +3,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   output: 'static',
-  site: 'https://multidimensional-ideological-model.vercel.app',
+  site: 'https://mim.zenus.systems',
   vite: {
     plugins: [tailwindcss()]
   }

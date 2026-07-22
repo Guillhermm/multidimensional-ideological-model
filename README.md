@@ -1,6 +1,6 @@
 # Multidimensional Ideological Model
 
-**Live:** [multidimensional-ideological-model.vercel.app](https://multidimensional-ideological-model.vercel.app)
+**Live:** [mim.zenus.systems](https://mim.zenus.systems)
 **Repository:** [github.com/Guillhermm/multidimensional-ideological-model](https://github.com/Guillhermm/multidimensional-ideological-model)
 
 An interactive 3D visualization of political ideologies as unit vectors in continuous Euclidean space, animated across 400 years of history and shaped by gravitational historical forces.

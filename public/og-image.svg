@@ -136,7 +136,7 @@
   <text x="660" y="455" font-family="system-ui,sans-serif" font-size="15" fill="#ffffff" fill-opacity="0.5">20 Ideologies  ·  400 Years of History  ·  Historical Gravity</text>
 
   <!-- URL -->
-  <text x="660" y="510" font-family="ui-monospace,monospace" font-size="14" fill="#818cf8" fill-opacity="0.65">multidimensional-ideological-model.vercel.app</text>
+  <text x="660" y="510" font-family="ui-monospace,monospace" font-size="14" fill="#818cf8" fill-opacity="0.65">mim.zenus.systems</text>
 
   <!-- Bottom right: MIM badge -->
   <circle cx="1155" cy="595" r="22" fill="#818cf8" fill-opacity="0.15" stroke="#818cf8" stroke-opacity="0.3" stroke-width="1"/>

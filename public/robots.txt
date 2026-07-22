@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://multidimensional-ideological-model.vercel.app/sitemap.xml
+Sitemap: https://mim.zenus.systems/sitemap.xml
