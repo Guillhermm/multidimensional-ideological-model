@@ -97,6 +97,7 @@ npm install
 npm run dev        # local dev server (Astro)
 npm test           # run Jest test suite
 npm run build      # static build → dist/
+npm run og         # re-render public/og-image.png from og-image.svg (link previews need PNG)
 ```
 
 ---
