@@ -6,7 +6,9 @@ export default defineConfig({
   // Astro 7 defaults to 'jsx', which drops the line break between text and an inline tag ("across<strong>").
   compressHTML: true,
   site: 'https://mim.zenus.systems',
+  server: { host: '127.0.0.1', port: 8438 },
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    server: { strictPort: true }
   }
 });
