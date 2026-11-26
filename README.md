@@ -5,7 +5,7 @@
 
 An interactive 3D visualization of political ideologies as unit vectors in continuous Euclidean space, animated across 400 years of history and shaped by gravitational historical forces.
 
-Built with Astro 5 + Tailwind CSS v4. Zero runtime dependencies on the visualization layer — pure HTML5 Canvas and ES6 JavaScript.
+Built with Astro 7 + Tailwind CSS v4. Zero runtime dependencies on the visualization layer — pure HTML5 Canvas and ES6 JavaScript.
 
 ---
 
@@ -45,7 +45,7 @@ Historical events (French Revolution, Russian Revolution, Rise of Fascism, WWII,
 
 | Layer | Technology |
 |-------|-----------|
-| Site framework | Astro 5 (static output) |
+| Site framework | Astro 7 (static output) |
 | Styling | Tailwind CSS v4 |
 | Visualization | HTML5 Canvas, ES6 modules |
 | Testing | Jest 29 + Babel |
