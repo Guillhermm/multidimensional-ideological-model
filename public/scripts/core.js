@@ -10,4 +10,6 @@ resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
 
 const cx = () => canvas.width / 2;
-const cy = () => canvas.height / 2;
+// Set by the page when a bottom sheet covers part of the canvas.
+let viewInsetBottom = 0;
+const cy = () => (canvas.height - viewInsetBottom) / 2;

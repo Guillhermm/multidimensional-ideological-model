@@ -14,10 +14,18 @@ const getUser = () => {
 };
 
 document.getElementById('exportPNG').onclick = () => {
-  const link = document.createElement('a');
-  link.download = 'ideological-model-screenshot.png';
-  link.href = canvas.toDataURL();
-  link.click();
+  const out = composeExport(canvas, () => document.createElement('canvas'));
+  out.toBlob(blob => {
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.download = exportFileName();
+    link.href = url;
+    // Safari and Firefox ignore clicks on anchors that are not in the document.
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }, 'image/png');
 };
 
 if (typeof module !== 'undefined') module.exports = { getUser };
@@ -32,7 +40,7 @@ const animate = () => {
     yearLabel.innerText = Math.floor(currentYear);
   }
 
-  const baseRadius = 440;
+  const baseRadius = Math.min(440, Math.min(canvas.width, canvas.height - viewInsetBottom) / 2);
   const user = getUser();
   const radical = Math.sqrt(user.x ** 2 + user.y ** 2 + user.z ** 2);
   const radius = baseRadius + radical * 40;
@@ -83,6 +91,17 @@ const animate = () => {
     ctx.stroke();
   });
 
+  const nearest = active
+    .map(i => {
+      const d = Math.sqrt(
+        (i.x - user.x) ** 2 +
+        (i.y - user.y) ** 2 +
+        (i.z - user.z) ** 2
+      );
+      return { name: i.name, d };
+    })
+    .sort((a, b) => a.d - b.d)[0];
+
   const all = [...active, user];
   const projected = all.map(p => {
     const rot = rotate(p);
@@ -95,33 +114,29 @@ const animate = () => {
     ctx.arc(p.x, p.y, (6 * p.scale) / radius, 0, Math.PI * 2);
     ctx.fillStyle = p.name === 'You' ? 'magenta' : rgbFromCoord(p.x, p.y, p.z);
     ctx.fill();
-
-    ctx.fillStyle = '#fff';
-    ctx.font = '11px Arial';
-    ctx.fillText(p.name, p.x + 6, p.y);
   });
 
-  const nearest = active
-    .map(i => {
-      const d = Math.sqrt(
-        (i.x - user.x) ** 2 +
-        (i.y - user.y) ** 2 +
-        (i.z - user.z) ** 2
-      );
-      return { name: i.name, d };
-    })
-    .sort((a, b) => a.d - b.d)[0];
+  const pointed = nearestPoint(projected, typeof pointer === 'undefined' ? null : pointer, 18);
+  const forced = new Set(['You']);
+  if (nearest) forced.add(nearest.name);
+  if (pointed) forced.add(pointed);
+
+  ctx.fillStyle = '#fff';
+  ctx.font = '11px Arial';
+  layoutLabels(projected, {
+    measure: name => ctx.measureText(name).width,
+    forced,
+    maxX: canvas.width,
+  }).forEach(l => ctx.fillText(l.name, l.x, l.y));
 
   const avgVelocity =
     active.reduce((s, i) => s + i.velocity, 0) / active.length;
 
-  document.querySelector('.info .year').innerHTML = Math.floor(currentYear);
-  document.querySelector('.info .instability').innerHTML = avgVelocity.toFixed(4);
-  document.querySelector('.info .radicality').innerHTML = radical.toFixed(2);
-  document.querySelector('.info .nearest').innerHTML =
-    nearest ? `${nearest.name} (${nearest.d.toFixed(2)})` : '—';
-
-
+  document.querySelector('.info .year').textContent = Math.floor(currentYear);
+  document.querySelector('.info .instability').textContent = avgVelocity.toFixed(4);
+  document.querySelector('.info .radicality').textContent = radical.toFixed(2);
+  document.querySelector('.info .nearest').textContent =
+    nearest ? `${nearest.name} (${nearest.d.toFixed(2)})` : 'None';
 
   requestAnimationFrame(animate);
 };

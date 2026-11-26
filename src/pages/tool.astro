@@ -1,9 +1,22 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+const hints = {
+  instability: 'Average movement of the ideologies between frames. Higher means they shift faster.',
+  radicality: 'Distance of your point from the center. 0 is centrist, 1 is the sphere surface.',
+  nearest: 'The ideology closest to your point, with its distance in parentheses.',
+  gravity: 'How strongly major events (1917, 1933, 1989) pull ideologies away from their base positions.',
+};
+
+const axes = [
+  { id: 'xSlider', key: 'x', letter: 'X', name: 'Economics', color: '#ef4444', low: 'Left', high: 'Right' },
+  { id: 'ySlider', key: 'y', letter: 'Y', name: 'Authority', color: '#22c55e', low: 'Libertarian', high: 'Authoritarian' },
+  { id: 'zSlider', key: 'z', letter: 'Z', name: 'Identity', color: '#3b82f6', low: 'Cosmopolitan', high: 'Nationalist' },
+];
 ---
 
 <Layout
-  title="3D Ideological Model — Tool"
+  title="Interactive Tool: Multidimensional Ideological Model"
   description="Interactive 3D visualization of political ideologies across history."
   hideNav={true}
 >
@@ -12,66 +25,70 @@ import Layout from '../layouts/Layout.astro';
   </style>
 
   <!-- Quiz origin banner -->
-  <div id="quizBanner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(129,140,248,0.18);backdrop-filter:blur(8px);border-bottom:1px solid rgba(129,140,248,0.25);padding:0.5rem 1rem;display:none;align-items:center;justify-content:space-between;font-size:0.8rem;color:var(--color-text);">
+  <div id="quizBanner" class="quiz-banner" hidden>
     <span>✓ Your position from the quiz has been applied.</span>
-    <div style="display:flex;gap:1rem;align-items:center;">
-      <a href="/quiz" style="color:var(--color-accent);text-decoration:none;font-weight:500;">Retake Quiz</a>
-      <button onclick="this.parentElement.parentElement.remove()" style="background:none;border:none;color:var(--color-muted);cursor:pointer;font-size:1rem;padding:0;">×</button>
+    <div class="quiz-banner-actions">
+      <a href="/quiz">Retake Quiz</a>
+      <button type="button" id="quizBannerClose" class="banner-close" aria-label="Dismiss quiz message">×</button>
     </div>
   </div>
 
-  <!-- Back link -->
   <a href="/" class="tool-back-link">← Home</a>
 
-  <canvas id="canvas"></canvas>
+  <canvas
+    id="canvas"
+    role="img"
+    aria-label="Interactive 3D sphere of political ideologies plotted on economic, authority and identity axes. Use the controls panel to move your own position."
+  ></canvas>
 
-  <!-- Mobile toggle button -->
-  <button id="uiToggle" class="ui-toggle" aria-label="Toggle controls" aria-expanded="true">
-    <span class="ui-toggle-icon">⚙</span>
+  <button id="uiToggle" class="ui-toggle" aria-label="Toggle controls" aria-controls="ui" aria-expanded="true">
+    <span class="ui-toggle-icon" aria-hidden="true">⚙</span>
     <span class="ui-toggle-label">Controls</span>
   </button>
 
   <div id="ui">
-    <!-- Mobile drag handle -->
     <div class="ui-handle" id="uiHandle"></div>
 
-    <h2 style="margin:0 0 1rem;font-size:1rem;font-weight:700;letter-spacing:-0.01em;">Ideological Atlas</h2>
+    <h1 class="ui-title">Ideological Atlas</h1>
 
     <div class="control">
-      <label>Time: <span id="yearLabel"></span></label>
+      <label for="timeSlider">Time: <span id="yearLabel"></span></label>
       <input type="range" id="timeSlider" />
     </div>
 
-    <div class="control">
-      <label>X — <span style="color:#ef4444;font-size:0.75em;">Economics</span></label>
-      <input type="range" id="xSlider" min="-1" max="1" step="0.01" value="0">
-    </div>
+    {axes.map(a => (
+      <div class="control">
+        <label for={a.id}>{a.letter}: <span class="axis-name" style={`color:${a.color};`}>{a.name}</span></label>
+        <input type="range" id={a.id} min="-1" max="1" step="0.01" value="0" aria-describedby={`${a.key}Ends`} />
+        <div class="ends" id={`${a.key}Ends`}><span>{a.low}</span><span>{a.high}</span></div>
+      </div>
+    ))}
 
     <div class="control">
-      <label>Y — <span style="color:#22c55e;font-size:0.75em;">Authority</span></label>
-      <input type="range" id="ySlider" min="-1" max="1" step="0.01" value="0">
-    </div>
-
-    <div class="control">
-      <label>Z — <span style="color:#3b82f6;font-size:0.75em;">Identity</span></label>
-      <input type="range" id="zSlider" min="-1" max="1" step="0.01" value="0">
-    </div>
-
-    <div class="control">
-      <label>Historical Gravity</label>
+      <div class="label-row">
+        <label for="gravitySlider">Historical Gravity</label>
+        <button type="button" class="hint" aria-expanded="false" aria-controls="tip-gravity" aria-label="About Historical Gravity">?</button>
+      </div>
+      <p class="tip" id="tip-gravity" hidden>{hints.gravity}</p>
       <input type="range" id="gravitySlider" min="0" max="2" step="0.01" value="0.4">
     </div>
 
     <div class="control buttons">
-      <button id="autoPlay">▶ Auto</button>
-      <button id="exportPNG">📸 Export</button>
+      <button type="button" id="autoPlay" aria-label="Auto play through time" aria-pressed="false">▶ Auto</button>
+      <button type="button" id="exportPNG" aria-label="Export as PNG image">📸 Export</button>
     </div>
 
     <div class="info">
-      Year: <span class="year"></span><br>
-      Instability: <span class="instability"></span><br>
-      Radicality: <span class="radicality"></span><br>
-      Nearest: <span class="nearest"></span>
+      <div class="row">Year: <span class="year"></span></div>
+      {['instability', 'radicality', 'nearest'].map(k => (
+        <div>
+          <div class="row">
+            <span>{k[0].toUpperCase() + k.slice(1)}: <span class={k}></span></span>
+            <button type="button" class="hint" aria-expanded="false" aria-controls={`tip-${k}`} aria-label={`About ${k}`}>?</button>
+          </div>
+          <p class="tip" id={`tip-${k}`} hidden>{hints[k]}</p>
+        </div>
+      ))}
     </div>
 
     <div class="ui-hints">
@@ -81,45 +98,93 @@ import Layout from '../layouts/Layout.astro';
   </div>
 
   <!-- Load scripts in dependency order -->
+  <script is:inline src="/scripts/motion.js"></script>
+  <script is:inline src="/scripts/position-hash.js"></script>
   <script is:inline src="/scripts/core.js"></script>
   <script is:inline src="/scripts/projection.js"></script>
   <script is:inline src="/scripts/interaction.js"></script>
   <script is:inline src="/scripts/data.js"></script>
   <script is:inline src="/scripts/physics.js"></script>
   <script is:inline src="/scripts/clustering.js"></script>
+  <script is:inline src="/scripts/labels.js"></script>
   <script is:inline src="/scripts/rendering.js"></script>
+  <script is:inline src="/scripts/export.js"></script>
   <script is:inline src="/scripts/time.js"></script>
   <script is:inline src="/scripts/main.js"></script>
 
   <!-- URL params: apply quiz results to sliders -->
   <script is:inline>
-    (function () {
-      const params = new URLSearchParams(window.location.search);
-      const clamp = v => Math.max(-1, Math.min(1, v));
+    (() => {
+      const pos = parsePosition(window.location.hash);
+      ['x', 'y', 'z'].forEach(axis => {
+        if (axis in pos) document.getElementById(`${axis}Slider`).value = pos[axis];
+      });
 
-      if (params.has('x')) document.getElementById('xSlider').value = clamp(parseFloat(params.get('x')));
-      if (params.has('y')) document.getElementById('ySlider').value = clamp(parseFloat(params.get('y')));
-      if (params.has('z')) document.getElementById('zSlider').value = clamp(parseFloat(params.get('z')));
-
-      if (params.get('from') === 'quiz') {
-        const banner = document.getElementById('quizBanner');
-        if (banner) banner.style.display = 'flex';
+      const banner = document.getElementById('quizBanner');
+      if (pos.fromQuiz && banner) {
+        banner.hidden = false;
+        document.documentElement.style.setProperty('--banner-h', '2.75rem');
+        document.getElementById('quizBannerClose').addEventListener('click', () => {
+          banner.remove();
+          document.documentElement.style.removeProperty('--banner-h');
+        });
       }
     })();
 
-    // Mobile UI toggle
-    (function () {
+    // Controls panel: a bottom sheet on phones, collapsed until opened.
+    (() => {
       const toggle = document.getElementById('uiToggle');
       const ui = document.getElementById('ui');
       if (!toggle || !ui) return;
 
-      let collapsed = false;
+      const phone = window.matchMedia('(max-width: 767px)');
+      let collapsed = phone.matches;
+
+      const apply = () => {
+        const hidden = phone.matches && collapsed;
+        ui.classList.toggle('ui--collapsed', collapsed);
+        ui.inert = hidden;
+        toggle.setAttribute('aria-expanded', String(!collapsed));
+        toggle.querySelector('.ui-toggle-label').textContent = collapsed ? 'Controls' : 'Hide';
+        viewInsetBottom = phone.matches && !collapsed ? ui.offsetHeight : 0;
+      };
 
       toggle.addEventListener('click', () => {
         collapsed = !collapsed;
-        ui.classList.toggle('ui--collapsed', collapsed);
-        toggle.setAttribute('aria-expanded', !collapsed);
-        toggle.querySelector('.ui-toggle-label').textContent = collapsed ? 'Controls' : 'Hide';
+        apply();
+      });
+      phone.addEventListener('change', apply);
+      if (window.ResizeObserver) new ResizeObserver(apply).observe(ui);
+      apply();
+    })();
+
+    // Readout explanations: open on hover, focus or tap; Escape closes.
+    (() => {
+      const buttons = [...document.querySelectorAll('.hint')];
+      const show = (btn, open) => {
+        btn.setAttribute('aria-expanded', String(open));
+        document.getElementById(btn.getAttribute('aria-controls')).hidden = !open;
+      };
+
+      buttons.forEach(btn => {
+        btn.addEventListener('mouseenter', () => show(btn, true));
+        btn.addEventListener('focus', () => show(btn, true));
+        btn.addEventListener('mouseleave', () => { if (!btn.dataset.pinned) show(btn, false); });
+        btn.addEventListener('blur', () => { delete btn.dataset.pinned; show(btn, false); });
+        btn.addEventListener('click', () => {
+          if (btn.dataset.pinned) {
+            delete btn.dataset.pinned;
+            show(btn, false);
+          } else {
+            btn.dataset.pinned = '1';
+            show(btn, true);
+          }
+        });
+      });
+
+      document.addEventListener('keydown', e => {
+        if (e.key !== 'Escape') return;
+        buttons.forEach(btn => { delete btn.dataset.pinned; show(btn, false); });
       });
     })();
   </script>
@@ -135,9 +200,51 @@ import Layout from '../layouts/Layout.astro';
     height: 100%;
   }
 
+  .quiz-banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(129, 140, 248, 0.18);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(129, 140, 248, 0.25);
+    padding: 0.5rem 1rem;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--color-text);
+  }
+
+  .quiz-banner:not([hidden]) { display: flex; }
+
+  .quiz-banner-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .quiz-banner-actions a {
+    color: var(--color-accent);
+    text-decoration: none;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .banner-close {
+    width: 2.75rem;
+    height: 2.75rem;
+    margin: -0.75rem -0.5rem -0.75rem 0;
+    padding: 0;
+    border: none;
+    background: none;
+    color: var(--color-muted);
+    font-size: 1.25rem;
+  }
+
   .tool-back-link {
     position: fixed;
-    top: 1rem;
+    top: calc(1rem + var(--banner-h, 0rem));
     right: 1.25rem;
     z-index: 90;
     background: rgba(15, 15, 26, 0.8);
@@ -154,10 +261,10 @@ import Layout from '../layouts/Layout.astro';
   /* Desktop: fixed panel top-left */
   #ui {
     position: fixed;
-    top: 1.25rem;
+    top: calc(1.25rem + var(--banner-h, 0rem));
     left: 1.25rem;
-    width: 280px;
-    max-height: calc(100vh - 2.5rem);
+    width: 17.5rem;
+    max-height: calc(100vh - 2.5rem - var(--banner-h, 0rem));
     overflow-y: auto;
     background: rgba(7, 7, 16, 0.82);
     padding: 1rem;
@@ -167,18 +274,42 @@ import Layout from '../layouts/Layout.astro';
     z-index: 10;
   }
 
+  .ui-title {
+    margin: 0 0 1rem;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
   .ui-handle { display: none; }
   .ui-toggle { display: none; }
 
   .control {
-    margin-bottom: 12px;
+    margin-bottom: 0.75rem;
   }
 
   .control label {
     font-size: 0.8rem;
     color: rgba(255, 255, 255, 0.7);
     display: block;
-    margin-bottom: 3px;
+    margin-bottom: 0.2rem;
+  }
+
+  .label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .axis-name {
+    font-size: 0.75em;
+  }
+
+  .ends {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.5);
   }
 
   .control.buttons {
@@ -211,25 +342,59 @@ import Layout from '../layouts/Layout.astro';
   .info {
     margin-top: 0.75rem;
     font-size: 0.75rem;
-    opacity: 0.85;
     line-height: 1.7;
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    opacity: 0.85;
+  }
+
+  .hint {
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0;
+    border-radius: 50%;
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.7);
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  /* Larger touch target than the visible circle. */
+  .hint::after {
+    content: '';
+    position: absolute;
+    inset: -0.625rem;
+  }
+
+  .tip {
+    margin: 0.125rem 0 0.375rem;
+    font-size: 0.7rem;
+    line-height: 1.45;
+    color: rgba(255, 255, 255, 0.7);
   }
 
   .ui-hints {
     margin-top: 0.75rem;
     font-size: 0.65rem;
-    color: rgba(255, 255, 255, 0.25);
+    color: rgba(255, 255, 255, 0.4);
     line-height: 1.5;
   }
 
-  /* ─── Mobile: bottom sheet ─────────────────────── */
+  /* Mobile: bottom sheet, collapsed on load. The toggle and Home sit on the
+     top edge so they never cover the sheet. */
   @media (max-width: 767px) {
     .tool-back-link {
-      top: auto;
-      bottom: 1rem;
-      right: 1rem;
-      font-size: 0.75rem;
-      padding: 0.3rem 0.7rem;
+      top: calc(0.75rem + var(--banner-h, 0rem));
+      right: 0.75rem;
+      display: inline-flex;
+      align-items: center;
+      min-height: 2.75rem;
+      padding: 0 0.875rem;
+      font-size: 0.8rem;
     }
 
     .ui-toggle {
@@ -237,14 +402,15 @@ import Layout from '../layouts/Layout.astro';
       align-items: center;
       gap: 0.4rem;
       position: fixed;
-      bottom: 1rem;
-      left: 1rem;
+      top: calc(0.75rem + var(--banner-h, 0rem));
+      left: 0.75rem;
       z-index: 20;
+      min-height: 2.75rem;
       background: rgba(129, 140, 248, 0.9);
       backdrop-filter: blur(8px);
       border: none;
       border-radius: 2rem;
-      padding: 0.5rem 1rem;
+      padding: 0 1rem;
       color: #fff;
       font-size: 0.8rem;
       font-weight: 600;
@@ -277,10 +443,10 @@ import Layout from '../layouts/Layout.astro';
 
     .ui-handle {
       display: block;
-      width: 36px;
-      height: 4px;
+      width: 2.25rem;
+      height: 0.25rem;
       background: rgba(255, 255, 255, 0.2);
-      border-radius: 2px;
+      border-radius: 0.125rem;
       margin: 0.4rem auto 0.75rem;
     }
 

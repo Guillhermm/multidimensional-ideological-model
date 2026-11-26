@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout
-  title="Ideological Positioning Quiz — MIM"
+  title="Ideological Positioning Quiz (MIM)"
   description="Answer 15 questions to find your position in the 3D ideological space."
 >
   <div style="max-width:760px;margin:0 auto;padding:3rem 1.5rem 6rem;">
@@ -16,12 +16,14 @@ import Layout from '../layouts/Layout.astro';
         15 questions across three dimensions. Your answers will calculate your position
         in 3D ideological space.
       </p>
+      <p style="color:var(--color-muted);font-size:0.8rem;max-width:36rem;margin:0.75rem auto 0;">
+        Your answers and position stay in your browser. Analytics only counts page visits.
+      </p>
     </div>
 
     <!-- Progress -->
-    <div id="progressContainer" style="margin-bottom:2rem;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
-        <span id="sectionLabel" style="font-size:0.875rem;font-weight:600;color:var(--color-accent);">Section 1 of 3: Economic</span>
+    <div id="progressContainer" class="quiz-progress">
+      <div style="margin-bottom:0.5rem;">
         <span id="progressLabel" style="font-size:0.8rem;color:var(--color-muted);">Questions 1–5 of 15</span>
       </div>
       <div style="height:4px;background:var(--color-border);border-radius:9999px;overflow:hidden;">
@@ -103,6 +105,10 @@ import Layout from '../layouts/Layout.astro';
   </div>
 </Layout>
 
+<script is:inline src="/scripts/motion.js"></script>
+<script is:inline src="/scripts/quiz-state.js"></script>
+<script is:inline src="/scripts/quiz-results.js"></script>
+<script is:inline src="/scripts/position-hash.js"></script>
 <script is:inline>
   const QUESTIONS = [
     // Economic (X axis)
@@ -129,9 +135,9 @@ import Layout from '../layouts/Layout.astro';
   const VALUES = [-2, -1, 0, 1, 2];
 
   const SECTIONS = [
-    { id: 'section-0', questionRange: [0, 4], label: 'Section 1 of 3: Economic', progress: '33', questionLabel: 'Questions 1–5 of 15' },
-    { id: 'section-1', questionRange: [5, 9], label: 'Section 2 of 3: Authority', progress: '66', questionLabel: 'Questions 6–10 of 15' },
-    { id: 'section-2', questionRange: [10, 14], label: 'Section 3 of 3: Identity', progress: '100', questionLabel: 'Questions 11–15 of 15' },
+    { id: 'section-0', questionRange: [0, 4], progress: '33', questionLabel: 'Questions 1–5 of 15' },
+    { id: 'section-1', questionRange: [5, 9], progress: '66', questionLabel: 'Questions 6–10 of 15' },
+    { id: 'section-2', questionRange: [10, 14], progress: '100', questionLabel: 'Questions 11–15 of 15' },
   ];
 
   const IDEOLOGIES = [
@@ -176,60 +182,54 @@ import Layout from '../layouts/Layout.astro';
       block.className = 'q-block';
       block.style.cssText = 'background:var(--color-card);border:1px solid var(--color-border);border-radius:0.75rem;padding:1.5rem;margin-bottom:1rem;';
 
+      const fieldset = document.createElement('fieldset');
+      fieldset.className = 'q-fieldset';
       const qNum = document.createElement('div');
       qNum.style.cssText = 'font-size:0.7rem;color:var(--color-muted);margin-bottom:0.5rem;';
       qNum.textContent = `Question ${qi + 1} of 15`;
       block.appendChild(qNum);
 
-      const qText = document.createElement('p');
-      qText.style.cssText = 'font-size:0.95rem;line-height:1.55;margin:0 0 1.25rem;font-weight:500;';
-      qText.textContent = q.text;
-      block.appendChild(qText);
+      const legend = document.createElement('legend');
+      legend.className = 'q-legend';
+      legend.id = `q-legend-${qi}`;
+      legend.textContent = q.text;
+      fieldset.appendChild(legend);
 
       const scaleRow = document.createElement('div');
       scaleRow.className = 'q-scale-row';
+      scaleRow.setAttribute('role', 'radiogroup');
+      scaleRow.setAttribute('aria-labelledby', legend.id);
 
       LABELS.forEach((label, li) => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.dataset.qi = qi;
-        btn.dataset.val = VALUES[li];
-        btn.style.cssText = 'padding:0.5rem 0.25rem;border-radius:0.5rem;border:1px solid var(--color-border);background:transparent;color:var(--color-muted);font-size:0.7rem;cursor:pointer;transition:all 0.15s;line-height:1.3;';
-        btn.textContent = label;
-        if (answers[qi] === VALUES[li]) {
-          btn.style.background = 'var(--color-accent)';
-          btn.style.color = '#fff';
-          btn.style.borderColor = 'var(--color-accent)';
-        }
-        btn.addEventListener('click', () => selectAnswer(qi, VALUES[li]));
-        scaleRow.appendChild(btn);
+        const option = document.createElement('label');
+        option.className = 'q-option';
+
+        const input = document.createElement('input');
+        input.type = 'radio';
+        input.name = `q${qi}`;
+        input.value = VALUES[li];
+        input.className = 'sr-only';
+        input.checked = isChecked(answers, qi, VALUES[li]);
+        input.addEventListener('change', () => selectAnswer(qi, VALUES[li]));
+
+        const face = document.createElement('span');
+        face.className = 'q-option-face';
+        face.textContent = label;
+
+        option.append(input, face);
+        scaleRow.appendChild(option);
       });
 
-      block.appendChild(scaleRow);
+      fieldset.appendChild(scaleRow);
+      block.appendChild(fieldset);
       el.appendChild(block);
     }
   }
 
   function selectAnswer(qi, val) {
-    answers[qi] = val;
-    const sec = SECTIONS[currentSection];
-    const [start, end] = sec.questionRange;
-    const el = document.getElementById(sec.id);
-
-    el.querySelectorAll(`button[data-qi="${qi}"]`).forEach(btn => {
-      const isSelected = parseInt(btn.dataset.val) === val;
-      btn.style.background = isSelected ? 'var(--color-accent)' : 'transparent';
-      btn.style.color = isSelected ? '#fff' : 'var(--color-muted)';
-      btn.style.borderColor = isSelected ? 'var(--color-accent)' : 'var(--color-border)';
-    });
-  }
-
-  function sectionAnswered(sectionIndex) {
-    const [start, end] = SECTIONS[sectionIndex].questionRange;
-    for (let i = start; i <= end; i++) {
-      if (answers[i] === null) return false;
-    }
-    return true;
+    answers = withAnswer(answers, qi, val);
+    const block = document.querySelector(`input[name="q${qi}"]`)?.closest('.q-block');
+    if (block) block.style.borderColor = 'var(--color-border)';
   }
 
   function showSection(index) {
@@ -238,14 +238,13 @@ import Layout from '../layouts/Layout.astro';
     });
 
     const sec = SECTIONS[index];
-    document.getElementById('sectionLabel').textContent = sec.label;
     document.getElementById('progressLabel').textContent = sec.questionLabel;
     document.getElementById('progressBar').style.width = `${(index / 3) * 100}%`;
     document.getElementById('btnBack').style.display = index === 0 ? 'none' : 'block';
     document.getElementById('btnNext').textContent = index === 2 ? 'See Results →' : 'Continue →';
 
     buildSection(index);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: scrollBehavior(window) });
   }
 
   function calculateResults() {
@@ -270,20 +269,6 @@ import Layout from '../layouts/Layout.astro';
     return { name: best.name, distance: bestDist.toFixed(2) };
   }
 
-  function renderAxisBar(containerId, label, value, color) {
-    const pct = ((value + 1) / 2) * 100;
-    return `
-      <div style="margin-bottom:0.25rem;display:flex;justify-content:space-between;align-items:center;">
-        <span style="font-size:0.8rem;font-weight:600;color:${color};">${label}</span>
-        <span style="font-size:0.8rem;font-family:var(--font-mono);color:var(--color-text);">${value > 0 ? '+' : ''}${value.toFixed(3)}</span>
-      </div>
-      <div style="height:8px;background:var(--color-border);border-radius:9999px;position:relative;margin-bottom:0.5rem;">
-        <div style="position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--color-muted);opacity:0.3;"></div>
-        <div style="height:100%;width:${Math.abs(value) * 50}%;background:${color};border-radius:9999px;position:absolute;${value >= 0 ? 'left:50%' : 'right:50%'};"></div>
-      </div>
-    `;
-  }
-
   function showResults() {
     const pos = calculateResults();
     const nearest = findNearest(pos);
@@ -292,36 +277,24 @@ import Layout from '../layouts/Layout.astro';
     document.getElementById('progressContainer').style.display = 'none';
     document.getElementById('results').style.display = 'block';
 
-    document.getElementById('resultX').innerHTML = renderAxisBar('resultX', 'Economic (X)', pos.x, '#ef4444');
-    document.getElementById('resultY').innerHTML = renderAxisBar('resultY', 'Authority (Y)', pos.y, '#22c55e');
-    document.getElementById('resultZ').innerHTML = renderAxisBar('resultZ', 'Identity (Z)', pos.z, '#3b82f6');
+    document.getElementById('resultX').replaceChildren(...buildAxisBar(document, 'Economic (X)', pos.x, '#ef4444'));
+    document.getElementById('resultY').replaceChildren(...buildAxisBar(document, 'Authority (Y)', pos.y, '#22c55e'));
+    document.getElementById('resultZ').replaceChildren(...buildAxisBar(document, 'Identity (Z)', pos.z, '#3b82f6'));
+    document.getElementById('resultNearest').replaceChildren(...buildNearest(document, nearest));
 
-    document.getElementById('resultNearest').innerHTML = `
-      <div style="font-size:0.75rem;color:var(--color-muted);margin-bottom:0.5rem;">Closest ideology</div>
-      <div style="font-size:1.5rem;font-weight:700;margin-bottom:0.25rem;">${nearest.name}</div>
-      <div style="font-size:0.8rem;color:var(--color-muted);">Distance: ${nearest.distance}</div>
-    `;
-
-    const url = `/tool?x=${pos.x}&y=${pos.y}&z=${pos.z}&from=quiz`;
-    document.getElementById('btnViewTool').href = url;
+    document.getElementById('btnViewTool').href = `/tool${serializePosition(pos)}`;
 
     document.getElementById('progressBar').style.width = '100%';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: scrollBehavior(window) });
   }
 
   document.getElementById('btnNext').addEventListener('click', () => {
-    if (!sectionAnswered(currentSection)) {
-      const [start, end] = SECTIONS[currentSection].questionRange;
-      for (let i = start; i <= end; i++) {
-        if (answers[i] === null) {
-          const blocks = document.querySelectorAll('.q-block');
-          const block = blocks[i - SECTIONS[currentSection].questionRange[0]];
-          if (block) {
-            block.style.border = '1px solid #ef4444';
-            block.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }
-          return;
-        }
+    const missing = firstUnanswered(answers, SECTIONS[currentSection].questionRange);
+    if (missing !== -1) {
+      const block = document.querySelector(`input[name="q${missing}"]`)?.closest('.q-block');
+      if (block) {
+        block.style.border = '1px solid #ef4444';
+        block.scrollIntoView({ behavior: scrollBehavior(window), block: 'center' });
       }
       return;
     }
@@ -355,10 +328,73 @@ import Layout from '../layouts/Layout.astro';
 </script>
 
 <style is:global>
+  .q-fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+  }
+
+  .q-legend {
+    padding: 0;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    margin: 0 0 1.25rem;
+    font-weight: 500;
+  }
+
   .q-scale-row {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 0.5rem;
+  }
+
+  .q-option {
+    display: flex;
+    position: relative;
+  }
+
+  .q-option-face {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 2.75rem;
+    padding: 0.5rem 0.25rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-border);
+    color: var(--color-muted);
+    font-size: 0.7rem;
+    line-height: 1.3;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .q-option input:checked + .q-option-face {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: #fff;
+  }
+
+  .q-option input:focus-visible + .q-option-face {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .quiz-progress {
+    margin-bottom: 2rem;
+  }
+
+  @media (max-width: 767px) {
+    .quiz-progress {
+      position: sticky;
+      top: 4rem;
+      z-index: 40;
+      margin-bottom: 1rem;
+      padding: 0.75rem 0 0.5rem;
+      background: var(--color-void);
+    }
   }
 
   @media (max-width: 480px) {
@@ -366,8 +402,8 @@ import Layout from '../layouts/Layout.astro';
       grid-template-columns: 1fr;
     }
 
-    .q-scale-row button {
-      text-align: left;
+    .q-option-face {
+      justify-content: flex-start;
       padding: 0.625rem 0.875rem;
       font-size: 0.8rem;
     }

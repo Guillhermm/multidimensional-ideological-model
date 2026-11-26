@@ -22,3 +22,10 @@ describe('Vercel Web Analytics', () => {
     }
   });
 });
+
+// A separate file could fail to load while the analytics module still runs, sending the raw URL.
+test('the analytics scrub is inlined in <head>, before the tracker', () => {
+  expect(layout).toMatch(/<script is:inline set:html=\{privacyScript\}><\/script>/);
+  expect(layout).not.toMatch(/src="\/scripts\/privacy\.js"/);
+  expect(layout.indexOf('set:html={privacyScript}')).toBeLessThan(layout.indexOf('</head>'));
+});

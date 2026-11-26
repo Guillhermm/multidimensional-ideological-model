@@ -1,4 +1,4 @@
-const CACHE = 'mim-v2';
+const CACHE = 'mim-v3';
 
 const PRECACHE = [
   '/',
@@ -14,6 +14,12 @@ const PRECACHE = [
   '/scripts/rendering.js',
   '/scripts/time.js',
   '/scripts/main.js',
+  '/scripts/labels.js',
+  '/scripts/export.js',
+  '/scripts/motion.js',
+  '/scripts/position-hash.js',
+  '/scripts/quiz-state.js',
+  '/scripts/quiz-results.js',
   '/manifest.json',
   '/favicon.svg',
 ];

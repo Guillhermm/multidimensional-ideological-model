@@ -13,12 +13,13 @@ const mockCtx = {
   fill: jest.fn(),
   fillText: jest.fn(),
   fillRect: jest.fn(),
+  measureText: jest.fn(name => ({ width: name.length * 6 })),
   strokeStyle: '',
   fillStyle: '',
   font: '',
 };
 
-const infoEl = { innerHTML: '' };
+const infoEl = { textContent: '' };
 const mockLink = { download: '', href: '', click: jest.fn() };
 
 global.document = {
@@ -33,6 +34,9 @@ global.document = {
 };
 
 // Canvas and 2D context
+global.viewInsetBottom = 0;
+global.layoutLabels = require('../public/scripts/labels').layoutLabels;
+global.nearestPoint = require('../public/scripts/labels').nearestPoint;
 global.canvas = {
   width: 800,
   height: 600,

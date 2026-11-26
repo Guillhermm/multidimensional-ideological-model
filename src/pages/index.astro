@@ -4,7 +4,7 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout
   title="Multidimensional Ideological Model"
-  description="Explore 20 political ideologies in continuous 3D space, animated across 400 years of history."
+  description="Explore 20 political ideologies in continuous 3D space, animated from 1789 to the present."
 >
   <!-- Hero -->
   <section style="min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:6rem 1.5rem;position:relative;overflow:hidden;">
@@ -42,8 +42,8 @@ import Layout from '../layouts/Layout.astro';
 
     <!-- Subtitle -->
     <p style="font-size:clamp(1rem,2.5vw,1.25rem);color:var(--color-muted);max-width:560px;line-height:1.65;margin:0 0 3rem;">
-      Explore 20 political ideologies as vectors in continuous 3D space — animated across
-      <strong style="color:var(--color-text);">400 years of history</strong> and shaped by gravitational historical forces.
+      Explore 20 political ideologies as vectors in continuous 3D space, animated from
+      <strong style="color:var(--color-text);">1789 to the present</strong> and shaped by gravitational historical forces.
     </p>
 
     <!-- CTAs -->
@@ -157,7 +157,7 @@ import Layout from '../layouts/Layout.astro';
       <div>
         <h2 style="font-size:1.75rem;font-weight:700;letter-spacing:-0.02em;margin:0 0 1rem;">Why not just 2D?</h2>
         <p style="color:var(--color-muted);line-height:1.75;margin:0 0 1rem;">
-          The traditional <em>Political Compass</em> maps ideologies onto two axes — economic and social.
+          The traditional <em>Political Compass</em> maps ideologies onto two axes: economic and social.
           While intuitive, academia has long criticized this as insufficient:
           it collapses distinct phenomena (nationalism, cultural values, identity) into a single axis.
         </p>
@@ -172,13 +172,13 @@ import Layout from '../layouts/Layout.astro';
       <div style="display:flex;flex-direction:column;gap:0.75rem;">
         <div style="background:var(--color-card);border:1px solid var(--color-border);border-radius:0.75rem;padding:1.25rem;">
           <div style="font-size:0.75rem;color:var(--color-muted);margin-bottom:0.25rem;">1D Model</div>
-          <div style="font-weight:500;">Left ←——→ Right</div>
+          <div style="font-weight:500;">Left ↔ Right</div>
           <div style="font-size:0.75rem;color:var(--color-muted);margin-top:0.25rem;">Cannot distinguish Fascism from Conservatism or Anarchism from Social Democracy.</div>
         </div>
         <div style="background:var(--color-card);border:1px solid var(--color-border);border-radius:0.75rem;padding:1.25rem;">
           <div style="font-size:0.75rem;color:var(--color-muted);margin-bottom:0.25rem;">2D Model (Political Compass)</div>
           <div style="font-weight:500;">Economic × Social/Authority</div>
-          <div style="font-size:0.75rem;color:var(--color-muted);margin-top:0.25rem;">Better — but conflates identity, nationalism, and cultural values into one axis.</div>
+          <div style="font-size:0.75rem;color:var(--color-muted);margin-top:0.25rem;">Better, but conflates identity, nationalism, and cultural values into one axis.</div>
         </div>
         <div style="background:var(--color-card);border:1px solid var(--color-accent-dim);border-radius:0.75rem;padding:1.25rem;">
           <div style="font-size:0.75rem;color:var(--color-accent);margin-bottom:0.25rem;">3D Model (This Tool)</div>
@@ -192,10 +192,10 @@ import Layout from '../layouts/Layout.astro';
   <!-- Features -->
   <section style="padding:5rem 1.5rem;max-width:1100px;margin:0 auto;">
     <h2 style="font-size:1.75rem;font-weight:700;letter-spacing:-0.02em;text-align:center;margin:0 0 3rem;">What you can explore</h2>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;">
+    <div class="features-grid">
       {[
-        { icon: '🌐', title: '20 Ideologies', desc: 'From Classical Liberalism to Maoism, Fascism to Municipalism — positioned with mathematical precision.' },
-        { icon: '⏱️', title: '400 Years', desc: 'Animate from the French Revolution (1789) to the present. Watch ideologies emerge and shift.' },
+        { icon: '🌐', title: '20 Ideologies', desc: 'From Classical Liberalism to Maoism, Fascism to Municipalism, each placed by hand in the 3D space.' },
+        { icon: '⏱️', title: '1789 to Today', desc: 'Animate from the French Revolution (1789) to the present. Watch ideologies emerge and shift.' },
         { icon: '🌌', title: 'Historical Gravity', desc: 'Major events (1917, 1933, 1989) act as gravitational forces pulling ideologies through ideological space.' },
         { icon: '📍', title: 'Your Position', desc: 'Place yourself in the model via the quiz or manual sliders. See which ideology you are closest to.' },
         { icon: '🔵', title: 'Live Clustering', desc: 'K-means clustering reveals ideological groupings as they evolve through history in real time.' },
@@ -214,11 +214,11 @@ import Layout from '../layouts/Layout.astro';
   <section style="padding:5rem 1.5rem;border-top:1px solid var(--color-border);">
     <div style="max-width:700px;margin:0 auto;text-align:center;">
       <h2 style="font-size:1.75rem;font-weight:700;margin:0 0 0.75rem;">How to use it</h2>
-      <p style="color:var(--color-muted);margin:0 0 3rem;">Two paths, same destination — your place in ideological space.</p>
+      <p style="color:var(--color-muted);margin:0 0 3rem;">Two paths, same destination: your place in ideological space.</p>
 
       <div class="paths-grid">
         <div style="background:var(--color-card);border:1px solid var(--color-border);border-radius:0.875rem;padding:1.75rem;">
-          <div style="font-size:0.75rem;color:var(--color-accent);font-weight:600;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:1rem;">Path A — Quiz</div>
+          <div style="font-size:0.75rem;color:var(--color-accent);font-weight:600;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:1rem;">Path A: Quiz</div>
           <ol style="color:var(--color-muted);font-size:0.875rem;line-height:1.8;padding-left:1.25rem;margin:0 0 1.5rem;">
             <li>Answer 15 political questions</li>
             <li>Get your position calculated automatically</li>
@@ -227,7 +227,7 @@ import Layout from '../layouts/Layout.astro';
           <a href="/quiz" style="display:inline-block;padding:0.625rem 1.25rem;border-radius:0.5rem;background:var(--color-accent);color:#fff;font-weight:600;font-size:0.875rem;text-decoration:none;">Take Quiz →</a>
         </div>
         <div style="background:var(--color-card);border:1px solid var(--color-border);border-radius:0.875rem;padding:1.75rem;">
-          <div style="font-size:0.75rem;color:var(--color-muted);font-weight:600;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:1rem;">Path B — Explore</div>
+          <div style="font-size:0.75rem;color:var(--color-muted);font-weight:600;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:1rem;">Path B: Explore</div>
           <ol style="color:var(--color-muted);font-size:0.875rem;line-height:1.8;padding-left:1.25rem;margin:0 0 1.5rem;">
             <li>Open the 3D tool directly</li>
             <li>Set X, Y, Z sliders manually</li>
@@ -289,6 +289,24 @@ import Layout from '../layouts/Layout.astro';
   @media (max-width: 480px) {
     .hero-title {
       font-size: 1.75rem;
+    }
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 899px) {
+    .features-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 539px) {
+    .features-grid {
+      grid-template-columns: 1fr;
     }
   }
 

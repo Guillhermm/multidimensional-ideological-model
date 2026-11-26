@@ -1,7 +1,7 @@
 {
   "name": "Multidimensional Ideological Model",
   "short_name": "MIM",
-  "description": "Explore 20 political ideologies in 3D space across 400 years of history.",
+  "description": "Explore 20 political ideologies in 3D space from 1789 to the present.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0f0f1a",

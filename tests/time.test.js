@@ -77,3 +77,20 @@ describe('time slider oninput handler', () => {
     expect(Number(mockYearLabel.innerText)).toBe(minYear);
   });
 });
+
+describe('auto-play start state', () => {
+  const { isAutoPlaying } = require('../public/scripts/time');
+
+  test('never starts playing on its own, whatever the motion preference', () => {
+    expect(isAutoPlaying()).toBe(false);
+  });
+
+  test('only the button starts it, and aria-pressed follows', () => {
+    mockAutoPlay.setAttribute = jest.fn();
+    mockAutoPlay.onclick();
+    expect(isAutoPlaying()).toBe(true);
+    expect(mockAutoPlay.setAttribute).toHaveBeenLastCalledWith('aria-pressed', 'true');
+    mockAutoPlay.onclick();
+    expect(isAutoPlaying()).toBe(false);
+  });
+});

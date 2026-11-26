@@ -1,6 +1,10 @@
 let dragging = false;
 let lx, ly;
 let lastPinchDist = null;
+let touchMoved = false;
+let tapX, tapY;
+// Last hover or tap position, read by main.js to keep that point's label visible.
+let pointer = null;
 
 canvas.addEventListener('mousedown', e => {
   dragging = true;
@@ -10,8 +14,13 @@ canvas.addEventListener('mousedown', e => {
 
 canvas.addEventListener('mouseup', () => dragging = false);
 
+canvas.addEventListener('mouseleave', () => { pointer = null; });
+
 canvas.addEventListener('mousemove', e => {
-  if (!dragging) return;
+  if (!dragging) {
+    pointer = { x: e.clientX, y: e.clientY };
+    return;
+  }
   setRotation(e.clientX - lx, e.clientY - ly);
   lx = e.clientX;
   ly = e.clientY;
@@ -66,6 +75,9 @@ canvas.addEventListener('touchstart', e => {
   if (e.touches.length === 1) {
     lx = e.touches[0].clientX;
     ly = e.touches[0].clientY;
+    tapX = lx;
+    tapY = ly;
+    touchMoved = false;
   } else if (e.touches.length === 2) {
     lastPinchDist = Math.hypot(
       e.touches[0].clientX - e.touches[1].clientX,
@@ -77,6 +89,7 @@ canvas.addEventListener('touchstart', e => {
 canvas.addEventListener('touchmove', e => {
   e.preventDefault();
   if (e.touches.length === 1) {
+    if (Math.hypot(e.touches[0].clientX - tapX, e.touches[0].clientY - tapY) > 6) touchMoved = true;
     setRotation(e.touches[0].clientX - lx, e.touches[0].clientY - ly);
     lx = e.touches[0].clientX;
     ly = e.touches[0].clientY;
@@ -91,4 +104,7 @@ canvas.addEventListener('touchmove', e => {
   }
 }, { passive: false });
 
-canvas.addEventListener('touchend', () => { lastPinchDist = null; }, { passive: false });
+canvas.addEventListener('touchend', () => {
+  lastPinchDist = null;
+  if (!touchMoved && tapX !== undefined) pointer = { x: tapX, y: tapY };
+}, { passive: false });

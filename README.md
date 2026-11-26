@@ -3,9 +3,9 @@
 **Live:** [mim.zenus.systems](https://mim.zenus.systems)
 **Repository:** [github.com/Guillhermm/multidimensional-ideological-model](https://github.com/Guillhermm/multidimensional-ideological-model)
 
-An interactive 3D visualization of political ideologies as unit vectors in continuous Euclidean space, animated across 400 years of history and shaped by gravitational historical forces.
+An interactive 3D visualization of political ideologies as unit vectors in continuous Euclidean space, animated from 1789 to the present and shaped by gravitational historical forces.
 
-Built with Astro 7 + Tailwind CSS v4. Zero runtime dependencies on the visualization layer — pure HTML5 Canvas and ES6 JavaScript.
+Built with Astro 7 + Tailwind CSS v4. Zero runtime dependencies on the visualization layer: pure HTML5 Canvas and ES6 JavaScript.
 
 ---
 
@@ -27,17 +27,17 @@ Historical events (French Revolution, Russian Revolution, Rise of Fascism, WWII,
 
 - **20 political ideologies** spanning 1600–present, positioned as vectors in 3D space
 - **Time slider** animating ideological drift from 1789 to the current year
-- **Historical gravity** — tune the strength of historical event forces (0–2×)
+- **Historical gravity**: tune the strength of historical event forces (0–2×)
 - **Spherical k-means clustering** (k=3) revealing dominant ideological coalitions in real time
 - **15-question positioning quiz** mapping your answers to coordinates via Likert scale
-- **User position** — place yourself via quiz or manual X/Y/Z sliders; nearest ideology computed dynamically
-- **Radicality metric** — Euclidean distance from origin (0 = centrist, 1 = maximally radical)
-- **System instability metric** — mean velocity of active ideologies per frame
-- **Trail visualization** — each ideology stores its last 80 positions
+- **User position**: place yourself via quiz or manual X/Y/Z sliders; nearest ideology computed dynamically
+- **Radicality metric**: Euclidean distance from origin (0 = centrist, 1 = maximally radical)
+- **System instability metric**: mean velocity of active ideologies per frame
+- **Trail visualization**: each ideology stores its last 80 positions
 - **PNG export** of the current canvas state
-- **Mobile support** — touch drag-to-rotate, bottom-sheet controls panel
-- **PWA** — installable, offline-capable via Service Worker
-- **Keyboard navigation** — arrow keys to rotate, +/− to zoom, 0 to reset
+- **Mobile support**: touch drag-to-rotate, bottom-sheet controls panel
+- **PWA**: installable, offline-capable via Service Worker
+- **Keyboard navigation**: arrow keys to rotate, +/− to zoom, 0 to reset
 
 ---
 
@@ -70,10 +70,17 @@ public/scripts/
   physics.js                # Historical gravity and inter-ideology interaction
   clustering.js             # Spherical k-means (cosine distance, k=3)
   projection.js             # Euler rotation + perspective projection
-  rendering.js              # Phong-shaded sphere, trails, labels, UI
+  rendering.js              # Phong-shaded sphere and axes
+  labels.js                 # Canvas label placement without overlaps
   interaction.js            # Mouse/touch drag, scroll zoom, keyboard
   time.js                   # Time slider, auto-play, year label
+  export.js                 # Opaque PNG export of the canvas
   main.js                   # Entry point, wires all modules
+  position-hash.js          # Quiz position in the URL fragment
+  privacy.js                # Strips query and fragment from analytics events
+  motion.js                 # prefers-reduced-motion helper
+  quiz-state.js             # Quiz answer state
+  quiz-results.js           # Quiz result DOM, built with textContent
 
 docs/
   ACADEMICAL_DOCUMENTATION.md   # Full mathematical formalism
@@ -132,5 +139,5 @@ Full mathematical documentation: [docs/ACADEMICAL_DOCUMENTATION.md](docs/ACADEMI
 
 ---
 
-**Author:** Guilherme Almeida Zeni — IMECC / Unicamp, Brazil
+**Author:** Guilherme Almeida Zeni, IMECC / Unicamp, Brazil
 **License:** MIT

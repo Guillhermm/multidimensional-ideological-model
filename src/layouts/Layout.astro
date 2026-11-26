@@ -1,6 +1,8 @@
 ---
 import '../styles/global.css';
 import Analytics from '@vercel/analytics/astro';
+// Inlined, not loaded by src, so a failed request can never let an unscrubbed URL reach analytics.
+import privacyScript from '../../public/scripts/privacy.js?raw';
 
 interface Props {
   title?: string;
@@ -10,7 +12,7 @@ interface Props {
 
 const {
   title = 'Multidimensional Ideological Model',
-  description = 'Explore 20 political ideologies in 3D space across 400 years of history.',
+  description = 'Explore 20 political ideologies in 3D space, animated from 1789 to the present.',
   hideNav = false,
 } = Astro.props;
 
@@ -73,6 +75,7 @@ const navLinks = [
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <script is:inline set:html={privacyScript}></script>
     <script is:inline>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () =>
